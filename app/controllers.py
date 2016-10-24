@@ -1,6 +1,7 @@
 from app import app, models, db
 from flask import request, jsonify, render_template
 
+
 Salary = models.Salary
 QUERY_PARAMS = [
     "agency",
