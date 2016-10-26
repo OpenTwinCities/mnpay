@@ -1,0 +1,64 @@
+<html>
+  <head lang="en">
+    <meta charset="UTF-8">
+    <title>MN Public Salaries</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- styles -->
+  </head>
+  <body>
+    <h1>MN Public Salaries</h1>
+    <form method="get">
+      First name: <input type="text" name="first_name" value=""> <br>
+      Middle name: <input type="text" name="middle_name" value=""> <br>
+      Last name: <input type="text" name="last_name" value=""> <br>
+      Agency: <input type="text" name="agency" value=""> <br>
+      Dept: <input type="text" name="dept" value=""> <br>
+      Title: <input type="text" name="title" value=""> <br>
+      <input type="submit" value="Submit">
+    </form>
+    <table>
+      <tbody>
+        <tr>
+          <th>First Name</th>
+          <th>Middle Name</th>
+          <th>Last Name</th>
+          <th>Agency</th>
+          <th>Dept</th>
+          <th>Title</th>
+          <th>Salary</th>
+          <th>Year</th>
+        </tr>
+        {% for item in data %}
+        <tr>
+          <td>
+            {{ item.first_name }}
+          </td>
+          <td>
+            {{ item.middle_name }}
+          </td>
+          <td>
+            {{ item.last_name }}
+          </td>
+          <td>
+            {{ item.agency }}
+          </td>
+          <td>
+            {{ item.dept }}
+          </td>
+          <td>
+            {{ item.title }}
+          </td>
+          <td>
+            {{ item.wages }}
+          </td>
+          <td>
+            {{ item.year }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a href="{{next_url}}"> next </a>
+    <div id="app"></div>
+  </body>
+</html>
