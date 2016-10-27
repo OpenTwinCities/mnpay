@@ -31,7 +31,7 @@ def get_salaries():
 
 
 def _get_salaries(query_params):
-    def_limit = 50
+    def_limit = 20
     limit = min(int(query_params.get("limit", def_limit)), def_limit)
     page_number = int(query_params.get("page", 1))
     query = _construct_salary_query(query_params)
@@ -43,7 +43,7 @@ def _get_salaries(query_params):
     if page_number + 1 <= page.pages:
         to_return["next_page"] = page_number + 1
     if 1 <= page_number - 1:
-        to_return["prev_page"] = page_number + 1
+        to_return["prev_page"] = page_number - 1
     return to_return
 
 
@@ -93,4 +93,5 @@ def no_react():
         template_params["prev_url"] = prev_url
     print(template_params.keys())
     return render_template("no_react.html",
-                           **template_params)
+                           **template_params,
+                           **args)
