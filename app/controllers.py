@@ -33,16 +33,17 @@ def get_salaries():
 def _get_salaries(query_params):
     def_limit = 50
     limit = min(int(query_params.get("limit", def_limit)), def_limit)
-    cont = int(query_params.get("batch_continue", 0))
+    page_number = int(query_params.get("page", 1))
     query = _construct_salary_query(query_params)
-    query = query.filter(Salary.id > cont)
-    result = [s for s in query.order_by(Salary.id).limit(limit)]
+    page = query.paginate(page=page_number, per_page=def_limit)
+    result = [s for s in page.items]
     to_return = {
         "data": [s.serialize() for s in result],
     }
-    if len(result) > 0:
-        max_id = result[-1].id
-        to_return["batch_continue"] = max_id + 1
+    if page_number + 1 <= page.pages:
+        to_return["next_page"] = page_number + 1
+    if 1 <= page_number - 1:
+        to_return["prev_page"] = page_number + 1
     return to_return
 
 
@@ -69,6 +70,7 @@ def add_salary():
 
 @app.route("/")
 def index():
+    print("foo")
     return render_template("index.html")
 
 
@@ -77,9 +79,18 @@ def no_react():
     args = {}
     for key in request.args:
         args[key] = request.args.get(key)
+    template_params = {}
     salary_data = _get_salaries(args)
-    args["batch_continue"] = salary_data["batch_continue"]
-    next_url = url_for("no_react", **args)
+    print(args.keys())
+    template_params["data"] = salary_data["data"]
+    if "next_page" in salary_data:
+        args["page"] = salary_data["next_page"]
+        next_url = url_for("no_react", **args)
+        template_params["next_url"] = next_url
+    if "prev_page" in salary_data:
+        args["page"] = salary_data["prev_page"]
+        prev_url = url_for("no_react", **args)
+        template_params["prev_url"] = prev_url
+    print(template_params.keys())
     return render_template("no_react.html",
-                           data=salary_data["data"],
-                           next_url=next_url)
+                           **template_params)
