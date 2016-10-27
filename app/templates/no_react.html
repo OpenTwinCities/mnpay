@@ -12,14 +12,44 @@
       <div class="page-header">
         <h1>Minnesota Public Salaries</h1>
       </div>
-      <form method="get">
-        First name: <input type="text" name="first_name" value=""> <br>
-        Middle name: <input type="text" name="middle_name" value=""> <br>
-        Last name: <input type="text" name="last_name" value=""> <br>
-        Agency: <input type="text" name="agency" value=""> <br>
-        Dept: <input type="text" name="dept" value=""> <br>
-        Title: <input type="text" name="title" value=""> <br>
-        <input type="submit" value="Submit">
+      <form class="form-horizontal" method="get">
+        <div class="form-group">
+          <label class="control-label col-sm-2">First name:</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="first_name" value="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Middle name:</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="middle_name" value="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Last name:</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="last_name" value="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Agency:</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="agency" value="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Dept:</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="dept" value="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2">Title:</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="title" value="">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
       </form>
       <table class="table">
         <tbody>
