@@ -31,11 +31,11 @@ def get_salaries():
 
 
 def _get_salaries(query_params):
-    def_limit = 20
+    def_limit = 50
     limit = min(int(query_params.get("limit", def_limit)), def_limit)
     page_number = int(query_params.get("page", 1))
     query = _construct_salary_query(query_params)
-    page = query.paginate(page=page_number, per_page=def_limit)
+    page = query.paginate(page=page_number, per_page=limit)
     result = [s for s in page.items]
     to_return = {
         "data": [s.serialize() for s in result],
