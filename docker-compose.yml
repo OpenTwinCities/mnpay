@@ -9,7 +9,7 @@ python:
   links:
     - postgres:postgres
   volumes:
-    - /usr/src/app
+    - .:/usr/src/app
   command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app
 
 #####################
@@ -21,7 +21,7 @@ nginx:
   ports:
     - "80:80"
   volumes:
-    - /www/static
+    - ./nginx/static:/www/static
   links:
     - python:python
 

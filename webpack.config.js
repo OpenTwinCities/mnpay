@@ -19,7 +19,7 @@ module.exports = {
     ]
   },
   output: {
-    path: __dirname + "/app/static/js",
+    path: __dirname + "/nginx/static/js",
     filename: "client.min.js"
   },
   plugins: debug ? [] : [
