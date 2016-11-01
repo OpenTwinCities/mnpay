@@ -5,7 +5,7 @@ export default class ResultTable extends React.Component {
     var _data = this.props.data;
     console.log(_data);
     return (
-      <table>
+      <table className="table">
         <tbody>
           <tr>
             <th>First Name</th>
