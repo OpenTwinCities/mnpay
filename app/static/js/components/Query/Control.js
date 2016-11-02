@@ -39,7 +39,6 @@ export default class Control extends React.Component {
       dept: this.state.dept,
       title: this.state.title
     };
-    console.log("in Control:handleSubmit")
     this.props.handleSubmit(filters);
   }
 

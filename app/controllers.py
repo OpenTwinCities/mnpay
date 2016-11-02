@@ -3,7 +3,6 @@ from flask import request, jsonify, render_template, url_for
 from urllib.parse import urlencode
 
 
-
 Salary = models.Salary
 QUERY_PARAMS = [
     "agency",
@@ -47,51 +46,6 @@ def _get_salaries(query_params):
     return to_return
 
 
-@app.route("/api/add_salary", methods=["post"])
-def add_salary():
-    first_name = request.args.get('first_name', "")
-    last_name = request.args.get('last_name', "")
-    agency = request.args.get('agency', "")
-    dept = request.args.get('dept', "")
-    wages = request.args.get('wages', "")
-    year = request.args.get('year', "")
-    title = request.args.get('title', "")
-    s = models.Salary(first_name=first_name,
-                      last_name=last_name,
-                      agency=agency,
-                      dept=dept,
-                      wages=wages,
-                      year=year,
-                      title=title)
-    db.session.add(s)
-    db.session.commit()
-    return jsonify(data="Success", status="OK")
-
-
 @app.route("/")
 def index():
-    print("foo")
     return render_template("index.html")
-
-
-@app.route("/noreact")
-def no_react():
-    args = {}
-    for key in request.args:
-        args[key] = request.args.get(key)
-    template_params = {}
-    salary_data = _get_salaries(args)
-    print(args.keys())
-    template_params["data"] = salary_data["data"]
-    if "next_page" in salary_data:
-        args["page"] = salary_data["next_page"]
-        next_url = url_for("no_react", **args)
-        template_params["next_url"] = next_url
-    if "prev_page" in salary_data:
-        args["page"] = salary_data["prev_page"]
-        prev_url = url_for("no_react", **args)
-        template_params["prev_url"] = prev_url
-    print(template_params.keys())
-    return render_template("no_react.html",
-                           **template_params,
-                           **args)

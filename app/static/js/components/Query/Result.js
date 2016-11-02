@@ -5,7 +5,6 @@ import Numeral from "numeral"
 export default class ResultTable extends React.Component {
   render() {
     var _data = this.props.data;
-    console.log(_data);
     return (
       <table className="table">
         <tbody>

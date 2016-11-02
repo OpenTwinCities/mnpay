@@ -8,7 +8,6 @@ import PageNav from "./Query/PageNav"
 export default class Query extends React.Component {
   constructor () {
     super();
-    console.log("In query constructor")
     this.state = {data: [], filters: {}, page: 1};
   }
 
@@ -17,7 +16,6 @@ export default class Query extends React.Component {
   }
 
   filterChange(filters) {
-    console.log("filterChange")
     this.setState({filters: filters, page: 1}, this.updateQuery)
   }
 
