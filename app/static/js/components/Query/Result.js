@@ -1,11 +1,12 @@
 import React from "react";
 
+import Numeral from "numeral"
+
 export default class ResultTable extends React.Component {
   render() {
     var _data = this.props.data;
-    console.log(_data);
     return (
-      <table>
+      <table className="table">
         <tbody>
           <tr>
             <th>First Name</th>
@@ -38,7 +39,7 @@ export default class ResultTable extends React.Component {
                         { object.title }
                       </td>
                       <td>
-                        { object.wages }
+                        { "$" + Numeral(object.wages).format("0,0.00") }
                       </td>
                       <td>
                         { object.year }
