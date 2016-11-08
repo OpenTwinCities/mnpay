@@ -7,7 +7,9 @@ export default class Control extends React.Component {
                   last_name: "",
                   agency: "",
                   dept: "",
-                  title: ""
+                  title: "",
+                  sortby: "wages",
+                  direction: "desc"
                 }
   }
 
@@ -31,13 +33,27 @@ export default class Control extends React.Component {
     this.setState({title: e.target.value})
   }
 
+  on_sortby_change(e){
+    this.setState({sortby: e.target.value})
+  }
+
+  on_direction_change(e){
+    this.setState({direction: e.target.value})
+  }
+
+  componentDidMount () {
+    this.handleSubmit();
+  }
+
   handleSubmit(e){
     var filters = {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
       agency: this.state.agency,
       dept: this.state.dept,
-      title: this.state.title
+      title: this.state.title,
+      sortby: this.state.sortby,
+      direction: this.state.direction
     };
     this.props.handleSubmit(filters);
   }
@@ -80,6 +96,28 @@ export default class Control extends React.Component {
           <label className="control-label col-sm-2">Title:</label>
           <div className="col-sm-5">
             <input type="text" className="form-control" name="title" onChange={ this.on_title_change.bind(this)} value={ this.state.title }/>
+          </div>
+        </div>
+        <div className="form-group">
+          <label className="control-label col-sm-2">Order by:</label>
+          <div className="col-sm-5">
+            <select className="form-control" value={this.state.sortby} onChange={this.on_sortby_change.bind(this)}>
+              <option value="first_name">First name</option>
+              <option value="last_name">Last name</option>
+              <option value="agency">Agency</option>
+              <option value="dept">Dept</option>
+              <option value="title">Title</option>
+              <option value="wages">Wages</option>
+            </select>
+          </div>
+        </div>
+        <div className="form-group">
+          <label className="control-label col-sm-2">Direction:</label>
+          <div className="col-sm-5">
+            <select className="form-control" value={this.state.direction} onChange={this.on_direction_change.bind(this)}>
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
           </div>
         </div>
         <div className="form-group">

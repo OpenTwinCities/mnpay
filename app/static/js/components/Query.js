@@ -11,10 +11,6 @@ export default class Query extends React.Component {
     this.state = {data: [], filters: {}, page: 1};
   }
 
-  componentDidMount () {
-    this.updateQuery();
-  }
-
   filterChange(filters) {
     this.setState({filters: filters, page: 1}, this.updateQuery)
   }
