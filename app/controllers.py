@@ -8,9 +8,20 @@ QUERY_PARAMS = [
     "agency",
     "dept",
     "first_name",
-    "middle_name",
     "last_name",
     "title",
+]
+SORTABLE_FIELDS = [
+    "agency",
+    "dept",
+    "first_name",
+    "last_name",
+    "title",
+    "wages"
+]
+DIRECTIONS = [
+    "desc",
+    "asc"
 ]
 
 
@@ -21,6 +32,20 @@ def _construct_salary_query(args):
             continue
         q_str = r"{0}%".format(args[key])
         query = query.filter(getattr(Salary, key).like(q_str))
+    query = _apply_order_to_query(query,
+                                  args.get("sortby", None),
+                                  args.get("direction", None))
+    return query
+
+
+def _apply_order_to_query(query, field, direction):
+    if field in SORTABLE_FIELDS:
+        model_field = getattr(Salary, field)
+        if direction in DIRECTIONS:
+            order_func = getattr(model_field, direction)
+            query = query.order_by(order_func())
+        else:
+            query = query.order_by(model_field)
     return query
 
 

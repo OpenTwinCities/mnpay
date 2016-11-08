@@ -15,7 +15,7 @@ export default class ResultTable extends React.Component {
             <th>Agency</th>
             <th>Dept</th>
             <th>Title</th>
-            <th>Salary</th>
+            <th>Wages</th>
             <th>Year</th>
           </tr>
           {_data.map(function(object, i){
