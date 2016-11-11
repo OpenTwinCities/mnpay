@@ -1,4 +1,4 @@
-# MN Wages #
+# MN Pay #
 ## Getting started ##
 ### Dependencies ###
 Your system needs the following installed:
