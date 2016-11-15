@@ -74,3 +74,8 @@ def _get_salaries(query_params):
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/get_involved")
+def get_involved():
+    return render_template("get_involved.html")
