@@ -69,7 +69,7 @@ export default class Control extends React.Component {
                 }, this.handleSubmit);
   }
 
-  _handleKeyPress(e){
+  handleKeyPress(e){
     if (e.key === 'Enter') {
       this.handleSubmit(e)
     }
@@ -78,7 +78,7 @@ export default class Control extends React.Component {
 
   render() {
     return (
-      <form className="form-horizontal" onKeyPress={this._handleKeyPress.bind(this)} method="get">
+      <form className="form-horizontal" onKeyPress={this.handleKeyPress.bind(this)} method="get">
         <div className="form-group">
           <div className="col-sm-4">
             <label for="first_name">First name:</label>
