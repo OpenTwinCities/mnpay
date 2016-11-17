@@ -26,8 +26,8 @@ def _split_name_col(series):
 
 def main(input_file, output_file, year):
     wb = load_workbook(filename=input_file)
-    hr_df = _convert_ws_to_df(wb["FY15_HR"])
-    wage_df = _convert_ws_to_df(wb["FY15_EARNINGS"])
+    hr_df = _convert_ws_to_df(wb["FY"+year[2:]+"_HR"])
+    wage_df = _convert_ws_to_df(wb["FY"+year[2:]+"_EARNINGS"])
     joined = pd.merge(hr_df,
                       wage_df,
                       on="TEMPORARY_EMPLOYEE_ID",
