@@ -1,9 +1,20 @@
-var debug = process.env.FLASK_ENV !== "production";
 var webpack = require("webpack");
+const TRAVIS = process.env.TRAVIS ? JSON.parse(process.env.TRAVIS) : false
+const DEBUG = process.env.FLASK_ENV !== "production" && !TRAVIS;
+
+var plugins = DEBUG ? [] : [
+  new webpack.optimize.DedupePlugin(),
+  new webpack.optimize.OccurenceOrderPlugin(),
+  new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false}),
+]
+if (TRAVIS) {
+  plugins.push(new webpack.NoErrorsPlugin());
+}
 
 module.exports = {
+  bail: TRAVIS,
   context: __dirname + "/app",
-  devtool: debug ? "inline-sourcemap" : null,
+  devtool: DEBUG ? "inline-sourcemap" : null,
   entry: "./static/js/client.js",
   module: {
     loaders: [
@@ -22,9 +33,5 @@ module.exports = {
     path: __dirname + "/nginx/static/js",
     filename: "client.min.js"
   },
-  plugins: debug ? [] : [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false}),
-  ],
+  plugins: plugins,
 };

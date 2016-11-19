@@ -4,7 +4,14 @@ python:
   - 3.5
 services:
   - docker
+before_install:
+  - pip install -r requirements.txt
+  - python db_create.py
+  - python load_in_csv.py sample_data.csv
+  - npm install
+  - npm install -g webpack
 install:
+  - webpack
   - docker-compose up -d
 script:
   - docker ps | grep -q nginx
