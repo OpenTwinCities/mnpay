@@ -5,7 +5,7 @@ python:
 services:
   - docker
 install:
-  - docker-compose up
+  - docker-compose up -d
 script:
   - docker ps | grep -q nginx
   - docker ps | grep -q python
