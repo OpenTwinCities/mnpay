@@ -122,10 +122,10 @@ export default class Control extends React.Component {
           </div>
         </div>
         <div className="form-group">
-          <div className="col-sm-4">
+          <div className="col-xs-8 col-sm-4">
             <button type="button" className="btn btn-primary btn-lg btn-block" onClick={ this.handleSubmit.bind(this) }>Search</button>
           </div>
-          <div className="col-sm-2">
+          <div className="col-xs-4 col-sm-2">
             <button type="button" className="btn btn-warning btn-lg btn-block" onClick={ this.handleClear.bind(this) }>Clear</button>
           </div>
         </div>
