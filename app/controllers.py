@@ -59,15 +59,13 @@ def _get_salaries(query_params):
     limit = min(int(query_params.get("limit", def_limit)), def_limit)
     page_number = int(query_params.get("page", 1))
     query = _construct_salary_query(query_params)
-    page = query.paginate(page=page_number, per_page=limit)
+    page = query.paginate(page=page_number, per_page=limit, error_out=False)
     result = [s for s in page.items]
     to_return = {
         "data": [s.serialize() for s in result],
     }
-    if page_number + 1 <= page.pages:
-        to_return["next_page"] = page_number + 1
-    if 1 <= page_number - 1:
-        to_return["prev_page"] = page_number - 1
+    to_return["current_page"] = page_number
+    to_return["max_page"] = page.pages
     return to_return
 
 
