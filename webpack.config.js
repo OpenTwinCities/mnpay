@@ -11,6 +11,10 @@ if (TRAVIS) {
   plugins.push(new webpack.NoErrorsPlugin());
 }
 
+if (!DEBUG) {
+  console.log("Building for production")
+}
+
 module.exports = {
   bail: TRAVIS,
   context: __dirname + "/app",
