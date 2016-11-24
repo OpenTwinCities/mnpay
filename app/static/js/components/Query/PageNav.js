@@ -13,7 +13,7 @@ export default class PageNav extends React.Component {
     }
     var start_point = page - Math.floor(num_buttons / 2);
     if (start_point > (max_page - num_buttons)) {
-      start_point = (max_page - num_buttons);
+      start_point = (max_page - num_buttons) + 1;
     }
     start_point = start_point >= 1 ? start_point : 1;
     return start_point;
@@ -28,7 +28,9 @@ export default class PageNav extends React.Component {
         var working_page = start_point + i;
         var displayText = working_page;
         var pageValue = working_page;
-        var active = (working_page == this.props.page)
+        console.log("----------------------")
+        console.log("working page " + working_page);
+        console.log("current page " + this.props.page);
         var done = false;
         if (i == 0){
           displayText = "First";
@@ -40,12 +42,14 @@ export default class PageNav extends React.Component {
           pageValue = this.props.max_page;
           done = true;
         }
+        var active = (pageValue == this.props.page)
         nav_buttons.push(<PageNavButton
                           key={i}
                           active={active}
                           handleClick={this.props.handlePageTransition}
                           displayText={displayText}
                           pageValue={pageValue}/>);
+        console.log("has value " + pageValue)
         if (done) {
           break;
         }
