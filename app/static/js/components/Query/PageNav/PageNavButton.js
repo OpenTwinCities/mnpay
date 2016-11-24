@@ -7,8 +7,12 @@ export default class PageNavButton extends React.Component {
   }
 
   render() {
+    var className="";
+    if (this.props.active){
+      className="active"
+    }
     return (
-      <li onClick={this.handleClick.bind(this)}>
+      <li className={className} onClick={this.handleClick.bind(this)}>
         <a>{this.props.displayText}</a>
       </li>
     );

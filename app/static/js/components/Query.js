@@ -27,8 +27,7 @@ export default class Query extends React.Component {
            .query({limit: 10})
            .end(function(err, res){
              self.setState({data: res.body.data});
-             self.setState({next_page: res.body.next_page});
-             self.setState({prev_page: res.body.prev_page});
+             self.setState({max_page: res.body.max_page});
            })
   }
 
@@ -37,7 +36,10 @@ export default class Query extends React.Component {
       <div>
         <Control filters={this.state.filters} handleSubmit={this.filterChange.bind(this)}/>
         <Result data={this.state.data}/>
-        <PageNav handlePageTransition={this.pageChange.bind(this)} prev_page={this.state.prev_page} next_page={this.state.next_page}/>
+        <PageNav handlePageTransition={this.pageChange.bind(this)}
+         page={this.state.page}
+         max_page={this.state.max_page}
+         num_buttons={7}/>
       </div>
     );
   }
