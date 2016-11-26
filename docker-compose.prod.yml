@@ -1,0 +1,40 @@
+version: '2'
+services:
+  oneoff:
+    environment:
+      - DJANGO_SETTINGS_MODULE=server.settings_prod
+    build: ./server
+    volumes:
+      - ./server:/code
+    depends_on:
+      - db
+  staticfiles:
+    environment:
+      - DJANGO_SETTINGS_MODULE=server.settings_prod
+    build: ./server
+    volumes:
+      - ./nginx/static:/static_root
+      - ./server:/code
+    command: python manage.py collectstatic --noinput
+  web:
+    environment:
+      - DJANGO_SETTINGS_MODULE=server.settings_prod
+    restart: always
+    build: ./server
+    command: /usr/local/bin/gunicorn -w 2 -b :8000 server.wsgi
+    volumes:
+      - ./server:/code
+    depends_on:
+      - db
+  nginx:
+    restart: always
+    build: ./nginx/
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/static:/www/static
+    depends_on:
+      - web
+  db:
+    restart: always
+    image: postgres

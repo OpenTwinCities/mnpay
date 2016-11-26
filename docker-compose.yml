@@ -1,24 +1,19 @@
-######################
-## PYTHON CONTAINER ##
-######################
-python:
-  restart: always
-  build: .
-  expose:
-    - "8000"
-  volumes:
-    - .:/usr/src/app
-  command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app
-
-#####################
-## NGINX CONTAINER ##
-#####################
-nginx:
-  restart: always
-  build: ./nginx/
-  ports:
-    - "80:80"
-  volumes:
-    - ./nginx/static:/www/static
-  links:
-    - python:python
+version: '2'
+services:
+  oneoff:
+    build: ./server
+    volumes:
+      - ./server:/code
+    depends_on:
+      - db
+  web:
+    build: ./server
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/code
+    depends_on:
+      - db
+  db:
+    image: postgres
