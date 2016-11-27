@@ -1,6 +1,6 @@
 var webpack = require("webpack");
 const TRAVIS = process.env.TRAVIS ? JSON.parse(process.env.TRAVIS) : false
-const DEBUG = process.env.FLASK_ENV !== "production" && !TRAVIS;
+const DEBUG = process.env.SERVER_ENV !== "production" && !TRAVIS;
 
 var plugins = DEBUG ? [] : [
   new webpack.optimize.DedupePlugin(),
@@ -19,7 +19,7 @@ module.exports = {
   bail: TRAVIS,
   context: __dirname + "/app",
   devtool: DEBUG ? "inline-sourcemap" : null,
-  entry: "./static/js/client.js",
+  entry: "/client/js/client.js",
   module: {
     loaders: [
       {
@@ -34,7 +34,7 @@ module.exports = {
     ]
   },
   output: {
-    path: __dirname + "/nginx/static/js",
+    path: "/static/js",
     filename: "client.min.js"
   },
   plugins: plugins,

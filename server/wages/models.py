@@ -4,13 +4,22 @@ from django.db import models
 class Agency(models.Model):
     name = models.CharField(max_length=128)
 
+    def __str__(self):
+        return self.name
+
 
 class Department(models.Model):
     name = models.CharField(max_length=128)
 
+    def __str__(self):
+        return self.name
+
 
 class Title(models.Model):
     name = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.name
 
 
 class Wage(models.Model):
@@ -22,3 +31,10 @@ class Wage(models.Model):
     title = models.ForeignKey(Title, on_delete=models.CASCADE)
     wage = models.DecimalField(max_digits=10, decimal_places=2)
     year = models.IntegerField(default=0)
+
+    def __str__(self):
+        return '{last}, {first} {middle}'.format(
+            last=self.last_name,
+            first=self.first_name,
+            middle=self.middle_name
+        )
