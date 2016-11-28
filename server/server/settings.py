@@ -37,6 +37,7 @@ if PRODUCTION:
 # Application definition
 
 INSTALLED_APPS = [
+    'home.apps.HomeConfig',
     'wages.apps.WagesConfig',
     'django.contrib.admin',
     'django.contrib.auth',

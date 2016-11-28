@@ -21,14 +21,26 @@ export default class Query extends React.Component {
 
   updateQuery () {
     var self = this;
-    Request.get("/api/salaries")
+    Request.get("/api/wages")
            .query(self.state.filters)
            .query({page: self.state.page})
            .query({limit: 10})
            .end(function(err, res){
              self.setState({data: res.body.data});
-             self.setState({next_page: res.body.next_page});
-             self.setState({prev_page: res.body.prev_page});
+             var cur_page = parseInt(res.body.cur_page);
+             var last_page = parseInt(res.body.last_page);
+             if (cur_page > 1) {
+               self.setState({prev_page: cur_page - 1});
+             }
+             else {
+               self.setState({prev_page: null});
+             }
+             if (cur_page != last_page) {
+               self.setState({next_page: cur_page + 1});
+             }
+             else {
+               self.setState({next_page: null});
+             }
            })
   }
 

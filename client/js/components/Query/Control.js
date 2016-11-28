@@ -8,7 +8,7 @@ export default class Control extends React.Component {
                   agency: "",
                   dept: "",
                   title: "",
-                  sortby: "wages",
+                  sortby: "wage",
                   direction: "desc"
                 }
   }
@@ -64,7 +64,7 @@ export default class Control extends React.Component {
                   agency: "",
                   dept: "",
                   title: "",
-                  sortby: "wages",
+                  sortby: "wage",
                   direction: "desc"
                 }, this.handleSubmit);
   }
@@ -110,7 +110,8 @@ export default class Control extends React.Component {
               <option value="agency">Agency</option>
               <option value="dept">Dept</option>
               <option value="title">Title</option>
-              <option value="wages">Wages</option>
+              <option value="wage">Wage</option>
+              <option value="year">Year</option>
             </select>
           </div>
           <div className="col-sm-2">

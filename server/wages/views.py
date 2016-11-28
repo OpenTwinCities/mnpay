@@ -1,17 +1,24 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from wages.models import Wage
 
 
 def index(request):
     return HttpResponse("Hello world. You're at the polls index.")
 
 
-QUERY_PARAMS = [
-    "agency",
-    "dept",
+SINGLE_SIDED_QUERY_PARAMS = [
     "first_name",
     "last_name",
+]
+FOREIGN_QUERY_PARAMS = [
+    "agency",
+    "dept",
     "title",
+]
+STRICT_QUERY_PARAMS = [
+    "year",
 ]
 SORTABLE_FIELDS = [
     "agency",
@@ -19,55 +26,70 @@ SORTABLE_FIELDS = [
     "first_name",
     "last_name",
     "title",
-    "wages",
+    "wage",
     "year"
 ]
-DIRECTIONS = [
-    "desc",
-    "asc"
-]
+DIRECTIONS = {
+    "desc": "-",
+    "asc": ""
+}
 
 
-def _construct_salary_query(args):
-    query = Salary.query
-    for key in QUERY_PARAMS:
-        if key not in args:
+def _construct_wage_query(query_params):
+    query = Wage.objects
+    params = {}
+    for key in SINGLE_SIDED_QUERY_PARAMS:
+        if key not in query_params:
             continue
-        q_str = r"{0}%".format(args[key])
-        query = query.filter(getattr(Salary, key).like(q_str))
+        params["{0}__startswith".format(key)] = query_params[key]
+    for key in FOREIGN_QUERY_PARAMS:
+        if key not in query_params:
+            continue
+        params["{0}__name__contains".format(key)] = query_params[key]
+    for key in STRICT_QUERY_PARAMS:
+        if key not in query_params:
+            continue
+        params["{0}".format(key)] = query_params[key]
+    query = query.filter(**params)
     query = _apply_order_to_query(query,
-                                  args.get("sortby", None),
-                                  args.get("direction", None))
+                                  query_params.get("sortby", None),
+                                  query_params.get("direction", None))
     return query
 
 
 def _apply_order_to_query(query, field, direction):
+    dir_sig = ""
+    if direction in DIRECTIONS:
+        dir_sig = DIRECTIONS[direction]
     if field in SORTABLE_FIELDS:
-        model_field = getattr(Salary, field)
-        if direction in DIRECTIONS:
-            order_func = getattr(model_field, direction)
-            query = query.order_by(order_func())
-        else:
-            query = query.order_by(model_field)
+        order_str = "{dir_sig}{field}".format(
+            dir_sig=dir_sig,
+            field=field
+        )
+        query = query.order_by(order_str)
     return query
 
 
-def get_salaries():
-    return jsonify(_get_salaries(request.args))
+def get_wages(request):
+    return JsonResponse(_get_wages_serialized(request.GET))
 
 
-def _get_salaries(query_params):
+def _get_wages_serialized(query_params):
     def_limit = 50
     limit = min(int(query_params.get("limit", def_limit)), def_limit)
-    page_number = int(query_params.get("page", 1))
-    query = _construct_salary_query(query_params)
-    page = query.paginate(page=page_number, per_page=limit)
-    result = [s for s in page.items]
+    page_number = query_params.get("page", 1)
+    query = _construct_wage_query(query_params)
+    paginator = Paginator(query, limit)
+    try:
+        wages = paginator.page(page_number)
+    except PageNotAnInteger:
+        wages = paginator.page(1)
+    except EmptyPage:
+        wages = paginator.page(paginator.num_pages)
+    result = [w for w in wages]
     to_return = {
-        "data": [s.serialize() for s in result],
+        "data": [w.serialize() for w in result],
     }
-    if page_number + 1 <= page.pages:
-        to_return["next_page"] = page_number + 1
-    if 1 <= page_number - 1:
-        to_return["prev_page"] = page_number - 1
+    to_return["cur_page"] = page_number
+    to_return["last_page"] = paginator.num_pages
     return to_return

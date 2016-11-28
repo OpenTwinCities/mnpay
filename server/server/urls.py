@@ -20,4 +20,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^api/', include('wages.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'', include('home.urls'))
 ]
