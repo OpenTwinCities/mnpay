@@ -11,14 +11,12 @@ export default class PageNav extends React.Component {
       prev_button = <PageNavButton
                      handleClick={this.props.handlePageTransition}
                      displayText="Previous"
-                     align="left"
                      pageValue={this.props.prev_page}/>
     }
     if (this.props.next_page) {
       next_button = <PageNavButton
                      handleClick={this.props.handlePageTransition}
                      displayText="Next"
-                     align="right"
                      pageValue={this.props.next_page}/>
     }
     return (
