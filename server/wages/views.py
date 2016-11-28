@@ -41,11 +41,11 @@ def _construct_wage_query(query_params):
     for key in SINGLE_SIDED_QUERY_PARAMS:
         if key not in query_params:
             continue
-        params["{0}__startswith".format(key)] = query_params[key]
+        params["{0}__istartswith".format(key)] = query_params[key]
     for key in FOREIGN_QUERY_PARAMS:
         if key not in query_params:
             continue
-        params["{0}__name__contains".format(key)] = query_params[key]
+        params["{0}__name__icontains".format(key)] = query_params[key]
     for key in STRICT_QUERY_PARAMS:
         if key not in query_params:
             continue

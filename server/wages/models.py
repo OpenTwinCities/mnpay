@@ -50,3 +50,12 @@ class Wage(models.Model):
             first=self.first_name,
             middle=self.middle_name
         )
+
+    class Meta:
+        unique_together = ("first_name",
+                           "last_name",
+                           "middle_name",
+                           "agency",
+                           "dept",
+                           "title",
+                           "year",)

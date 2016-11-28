@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
+from django.db.utils import IntegrityError
 from wages.models import Wage, Title, Department, Agency
 import pandas as pd
 
@@ -23,15 +24,18 @@ class Command(BaseCommand):
                 wage = round(row['WAGES'], 2)
                 year = row['YEAR']
 
-                new_instance, _ = Wage.objects.get_or_create(
-                    first_name=row['FIRST_NAME'],
-                    middle_name=row['MIDDLE_NAME'],
-                    last_name=row['LAST_NAME'],
-                    agency=agency,
-                    dept=dept,
-                    title=title,
-                    wage=round(row['WAGES'], 2),
-                    year=row['YEAR']
-                )
-                new_instance.save()
+                try:
+                    new_instance, _ = Wage.objects.get_or_create(
+                        first_name=row['FIRST_NAME'],
+                        middle_name=row['MIDDLE_NAME'],
+                        last_name=row['LAST_NAME'],
+                        agency=agency,
+                        dept=dept,
+                        title=title,
+                        wage=round(row['WAGES'], 2),
+                        year=row['YEAR']
+                    )
+                    new_instance.save()
+                except IntegrityError:
+                    pass
         self.stdout.write('Wages loaded')
