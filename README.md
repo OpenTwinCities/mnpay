@@ -10,7 +10,7 @@ Your system needs the following installed:
 First start up all of our services
 ```
 $ source ./dev_env.sh
-$ docker-compose up
+$ docker-compose up --build
 ```
 leave this terminal open.
 
