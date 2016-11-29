@@ -7,4 +7,5 @@ install:
   - docker-compose up -d
 script:
   - docker ps | grep -q nginx
-  - docker ps | grep -q python
+  - docker ps | grep -q web
+  - docker ps | grep -q db
