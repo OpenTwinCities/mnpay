@@ -5,41 +5,49 @@ Your system needs the following installed:
 
 - Docker - DigitalOcean has a [great tutorial](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04) to do this on ubuntu 16.04.
 - Docker-compose - If you have pip installed this can be installed with `pip install docker-compose`
-- nodejs - I suggest using NVM. Once again, [DigitalOcean has you covered](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-16-04).
 
 ### One-time setup ###
-Setup our python dependencies
+First start up all of our services
 ```
-$ cd <project_repo>
-$ pip install -r requirements
+$ source ./dev_env.sh
+$ docker-compose up --build
 ```
+leave this terminal open.
+
 Initialize the database and load in some sample data
 ```
-$ python db_create.py
-$ python load_in_csv.py sample_data.csv
+$ docker-compose run oneoff python manage.py migrate
+$ docker-compose run oneoff python manage.py loadwages ./raw_data/sample_data.csv
 ```
 
-Setup our node dependencies
+#### Optional ####
+If you would like to add a super user you can run
 ```
-$ npm install
+docker-compose run oneoff python manage.py createsuperuser
 ```
-Install webpack globally so we can use the `webpack` command.
-```
-$ npm install -g webpack
-```
+after initializing the database. It will prompt you to enter a username and
+password. You can then sign in to the admin console at
+[localhost/admin](http://localhost/admin).
 
 
 ### Running ###
 To launch your server run
 ```
-docker-compose up -d
+$ source ./dev_env.sh
+$ docker-compose up
 ```
 You can then direct your browser to [localhost:80](http://localhost/) to see the site.
 
-If you are working on the client, start webpack in watch mode.
+If you are working on the server, restart the server container to see changes.
+Do this by hitting `ctrl+c` in the terminal you ran `docker-compose up` in,
+then run `docker-compose up` again.
+
+### Adding server dependencies ###
+If you add a dependency to the server you need to rebuild the docker containers
+in order for it to get picked up. This would be the case if you ran
+`pip install [anything]`. Add the requirement to `server/requirements.txt`
+and then run
 ```
-$ cd <project_repo>
-$ webpack -w
+$ docker-compose build oneoff
+$ docker-compose build web
 ```
-This way everytime that you make a change to client code it will rebuild it and
-put it were our nginx docker container can see it.

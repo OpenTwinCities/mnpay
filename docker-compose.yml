@@ -1,24 +1,44 @@
-######################
-## PYTHON CONTAINER ##
-######################
-python:
-  restart: always
-  build: .
-  expose:
-    - "8000"
-  volumes:
-    - .:/usr/src/app
-  command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app
-
-#####################
-## NGINX CONTAINER ##
-#####################
-nginx:
-  restart: always
-  build: ./nginx/
-  ports:
-    - "80:80"
-  volumes:
-    - ./nginx/static:/www/static
-  links:
-    - python:python
+version: '2'
+services:
+  oneoff:
+    build: ./server
+    volumes:
+      - ./server:/usr/src/app
+    depends_on:
+      - db
+  staticfiles:
+    build: ./server
+    volumes:
+      - ./nginx/static:/static_root
+      - ./server:/usr/src/app
+    command: python manage.py collectstatic --noinput
+  client:
+    build: ./client
+    environment:
+      - SERVER_ENV=${SERVER_ENV}
+    volumes:
+      - ./client:/client
+      - ./nginx/static:/static
+  web:
+    environment:
+      - SERVER_ENV=${SERVER_ENV}
+      - SECRET_KEY=${SECRET_KEY}
+    restart: always
+    build: ./server
+    command: /usr/local/bin/gunicorn -w 2 -b :8000 server.wsgi
+    volumes:
+      - ./server:/usr/src/app
+    depends_on:
+      - db
+  nginx:
+    restart: always
+    build: ./nginx/
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/static:/www/static
+    depends_on:
+      - web
+  db:
+    restart: always
+    image: postgres
