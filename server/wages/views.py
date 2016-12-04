@@ -4,9 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from wages.models import Wage
 
 
-def index(request):
-    return HttpResponse("Hello world. You're at the polls index.")
-
+DEFAULT_LIMIT = 50
 
 SINGLE_SIDED_QUERY_PARAMS = [
     "first_name",
@@ -75,21 +73,41 @@ def get_wages(request):
 
 
 def _get_wages_serialized(query_params):
-    def_limit = 50
-    limit = min(int(query_params.get("limit", def_limit)), def_limit)
-    page_number = query_params.get("page", 1)
+    req_limit = _safe_cast(query_params.get("limit"),
+                           int,
+                           DEFAULT_LIMIT)
+    if req_limit < 1:
+        req_limit = DEFAULT_LIMIT
+    limit = min(req_limit, DEFAULT_LIMIT)
     query = _construct_wage_query(query_params)
     paginator = Paginator(query, limit)
-    try:
-        wages = paginator.page(page_number)
-    except PageNotAnInteger:
-        wages = paginator.page(1)
-    except EmptyPage:
-        wages = paginator.page(paginator.num_pages)
+
+    min_page = 1
+    req_page = _safe_cast(query_params.get("page", 1),
+                          int,
+                          min_page)
+    page_number = _shift_to_interval(req_page, min_page, paginator.num_pages)
+    wages = paginator.page(page_number)
+
     result = [w for w in wages]
     to_return = {
         "data": [w.serialize() for w in result],
     }
-    to_return["cur_page"] = page_number
+    to_return["cur_page"] = wages.number
     to_return["last_page"] = paginator.num_pages
     return to_return
+
+
+def _safe_cast(val, to_type, default=None):
+    try:
+        return to_type(val)
+    except (ValueError, TypeError):
+        return default
+
+
+def _shift_to_interval(val, min_point, max_point):
+    if val < min_point:
+        val = min_point
+    elif val > max_point:
+        val = max_point
+    return val
