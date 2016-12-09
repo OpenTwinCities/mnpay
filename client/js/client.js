@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import Layout from "./components/Layout";
+import Query from "./components/Query";
 
 const app = document.getElementById('app');
-ReactDOM.render(<Layout/>, app);
+ReactDOM.render(<Query/>, app);
