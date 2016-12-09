@@ -17,7 +17,7 @@ leave this terminal open.
 Initialize the database and load in some sample data
 ```
 $ docker-compose run oneoff python manage.py migrate
-$ docker-compose run oneoff python manage.py loadwages ./raw_data/sample_data.csv
+$ docker-compose run oneoff python manage.py loaddata sample_data.json
 ```
 
 #### Optional ####
