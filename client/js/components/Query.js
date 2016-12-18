@@ -6,17 +6,38 @@ import Control from "./Query/Control"
 import PageNav from "./Query/PageNav"
 
 export default class Query extends React.Component {
-  constructor () {
+  constructor ({location: { query }}) {
     super();
-    this.state = {data: [], filters: {}, page: 1};
+    var page = query["page"]
+    if ("page" in query) {
+      delete query["page"]
+    }
+    this.state = {data: [], filters: query, page: page};
   }
 
   filterChange(filters) {
+
+    var params = Object.assign(filters, {page: 1})
+    this.props.router.push({query: params})
     this.setState({filters: filters, page: 1}, this.updateQuery)
   }
 
   pageChange(page_number) {
+    var params = Object.assign(this.state.filters, {page: page_number})
+    this.props.router.push({query: params})
     this.setState({page: page_number}, this.updateQuery);
+  }
+
+  componentDidMount () {
+    this.updateQuery();
+  }
+
+  componentWillReceiveProps({location: { query }}) {
+    var page = query["page"]
+    if ("page" in query) {
+      delete query["page"]
+    }
+    this.setState({filters: query, page: page}, this.updateQuery)
   }
 
   updateQuery () {
