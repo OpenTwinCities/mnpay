@@ -8,24 +8,19 @@ import PageNav from "./Query/PageNav"
 export default class Query extends React.Component {
   constructor ({location: { query }}) {
     super();
-    var page = query["page"]
-    if ("page" in query) {
-      delete query["page"]
-    }
-    this.state = {data: [], filters: query, page: page};
+    this.state = {data: [], filters: query};
   }
 
   filterChange(filters) {
-
-    var params = Object.assign(filters, {page: 1})
-    this.props.router.push({query: params})
-    this.setState({filters: filters, page: 1}, this.updateQuery)
+    var params = Object.assign(filters, {page: 1});
+    this.props.router.push({query: params});
+    this.setState({filters: params}, this.updateQuery);
   }
 
   pageChange(page_number) {
-    var params = Object.assign(this.state.filters, {page: page_number})
-    this.props.router.push({query: params})
-    this.setState({page: page_number}, this.updateQuery);
+    var params = Object.assign(this.state.filters, {page: page_number});
+    this.props.router.push({query: params});
+    this.setState({filters: params}, this.updateQuery);
   }
 
   componentDidMount () {
@@ -33,18 +28,13 @@ export default class Query extends React.Component {
   }
 
   componentWillReceiveProps({location: { query }}) {
-    var page = query["page"]
-    if ("page" in query) {
-      delete query["page"]
-    }
-    this.setState({filters: query, page: page}, this.updateQuery)
+    this.setState({filters: query}, this.updateQuery)
   }
 
   updateQuery () {
     var self = this;
     Request.get("/api/wages")
            .query(self.state.filters)
-           .query({page: self.state.page})
            .query({limit: 10})
            .end(function(err, res){
              self.setState({data: res.body.data});
