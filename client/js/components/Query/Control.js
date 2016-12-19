@@ -17,10 +17,6 @@ export default class Control extends React.Component {
     this.setState({[e.target.id]: e.target.value})
   }
 
-  componentDidMount () {
-    this.handleSubmit();
-  }
-
   handleSubmit(e){
     var filters = {
       first_name: this.state.first_name,
@@ -31,6 +27,11 @@ export default class Control extends React.Component {
       sortby: this.state.sortby,
       direction: this.state.direction
     };
+    Object.keys(filters).forEach(function(key) {
+      if (filters[key] == "") {
+        delete filters[key]
+      }
+    })
     this.props.handleSubmit(filters);
   }
 

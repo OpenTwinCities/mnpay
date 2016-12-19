@@ -6,24 +6,35 @@ import Control from "./Query/Control"
 import PageNav from "./Query/PageNav"
 
 export default class Query extends React.Component {
-  constructor () {
+  constructor ({location: { query }}) {
     super();
-    this.state = {data: [], filters: {}, page: 1};
+    this.state = {data: [], filters: query};
   }
 
   filterChange(filters) {
-    this.setState({filters: filters, page: 1}, this.updateQuery)
+    var params = Object.assign(filters, {page: 1});
+    this.props.router.push({query: params});
+    this.setState({filters: params}, this.updateQuery);
   }
 
   pageChange(page_number) {
-    this.setState({page: page_number}, this.updateQuery);
+    var params = Object.assign(this.state.filters, {page: page_number});
+    this.props.router.push({query: params});
+    this.setState({filters: params}, this.updateQuery);
+  }
+
+  componentDidMount () {
+    this.updateQuery();
+  }
+
+  componentWillReceiveProps({location: { query }}) {
+    this.setState({filters: query}, this.updateQuery)
   }
 
   updateQuery () {
     var self = this;
     Request.get("/api/wages")
            .query(self.state.filters)
-           .query({page: self.state.page})
            .query({limit: 10})
            .end(function(err, res){
              self.setState({data: res.body.data});
