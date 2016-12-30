@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from wages.models import Wage
-
+from numpy import histogram
+import logging
+from itertools import tee
 
 DEFAULT_LIMIT = 50
 
@@ -31,6 +33,13 @@ DIRECTIONS = {
     "desc": "-",
     "asc": ""
 }
+
+
+def pairwise(iterable):
+    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    a, b = tee(iterable)
+    next(b, None)
+    return zip(a, b)
 
 
 def _construct_wage_query(query_params):
@@ -122,3 +131,26 @@ def _shift_to_interval(val, min_point, max_point):
     elif val > max_point:
         val = max_point
     return val
+
+
+def get_query_stats(request):
+    rsp = _get_query_stats(request.GET)
+    return JsonResponse(rsp)
+
+
+def _get_query_stats(query_params):
+    query = _construct_wage_query(query_params)
+    wages = [float(wage.wage) for wage in query]
+    counts, bins = histogram(wages, bins=20)
+    counts = counts.tolist()
+    bins = bins.tolist()
+    edges = pairwise(bins)
+
+    result = {"hist": []}
+    for count, edge_pair in zip(counts, edges):
+        result["hist"].append(
+            {"count": count,
+             "lower": edge_pair[0],
+             "upper": edge_pair[1]}
+        )
+    return result
