@@ -4,17 +4,29 @@ import Request from "superagent";
 import Result from "./Query/Result"
 import Control from "./Query/Control"
 import PageNav from "./Query/PageNav"
+import StatsBox from "./Query/StatsBox"
 
 export default class Query extends React.Component {
   constructor ({location: { query }}) {
     super();
-    this.state = {data: [], filters: query};
+    this.state = {data: [],
+                  filters: query,
+                  stats: [],
+                  showPlot: false};
   }
 
   filterChange(filters) {
     var params = Object.assign(filters, {page: 1});
     this.props.router.push({query: params});
     this.setState({filters: params}, this.updateQuery);
+  }
+
+  showPlot() {
+    this.setState({showPlot: true});
+  }
+
+  hidePlot() {
+    this.setState({showPlot: false});
   }
 
   pageChange(page_number) {
@@ -53,13 +65,23 @@ export default class Query extends React.Component {
                self.setState({next_page: null});
              }
            })
+     Request.get("/api/stats")
+            .query(self.state.filters)
+            .end(function(err, res){
+              self.setState({stats: res.body.hist});
+            })
   }
 
   render() {
     return (
       <div>
-        <Control filters={this.state.filters} handleSubmit={this.filterChange.bind(this)}/>
+        <Control filters={this.state.filters}
+                 handleSubmit={this.filterChange.bind(this)}
+                 showPlot={this.showPlot.bind(this)}/>
         <Result data={this.state.data}/>
+        <StatsBox data={this.state.stats}
+                  onClose={this.hidePlot.bind(this)}
+                  show={this.state.showPlot}/>
         <PageNav handlePageTransition={this.pageChange.bind(this)} prev_page={this.state.prev_page} next_page={this.state.next_page}/>
       </div>
     );
