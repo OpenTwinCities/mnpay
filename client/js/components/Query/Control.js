@@ -57,11 +57,11 @@ export default class Control extends React.Component {
     return (
       <form className="form-horizontal" onKeyPress={this.handleKeyPress.bind(this)} method="get">
         <div className="form-group">
-          <div className="col-sm-4">
+          <div className="col-xs-6 col-sm-4">
             <label for="first_name">First name:</label>
             <input type="text" className="form-control" id="first_name" onChange={ this.on_change.bind(this) } name="first_name" value={ this.state.first_name }/>
           </div>
-          <div className="col-sm-4">
+          <div className="col-xs-6 col-sm-4">
             <label for="last_name">Last name:</label>
             <input type="text" className="form-control" id="last_name" name="last_name" onChange={ this.on_change.bind(this)} value={ this.state.last_name }/>
           </div>
@@ -79,7 +79,7 @@ export default class Control extends React.Component {
             <label for="dept">Dept:</label>
             <input type="text" className="form-control" id="dept" name="dept" onChange={ this.on_change.bind(this)} value={ this.state.dept }/>
           </div>
-          <div className="col-sm-2">
+          <div className="col-xs-6 col-sm-2">
             <label for="sortby">Order by:</label>
             <select className="form-control" id="sortby" value={this.state.sortby} onChange={this.on_change.bind(this)}>
               <option value="first_name">First name</option>
@@ -91,7 +91,7 @@ export default class Control extends React.Component {
               <option value="year">Year</option>
             </select>
           </div>
-          <div className="col-sm-2">
+          <div className="col-xs-6 col-sm-2">
             <label for="direction">Direction:</label>
             <select className="form-control" id="direction" value={this.state.direction} onChange={this.on_change.bind(this)}>
               <option value="asc">Ascending</option>
@@ -100,15 +100,20 @@ export default class Control extends React.Component {
           </div>
         </div>
         <div className="form-group">
-          <div className="col-xs-8 col-sm-4">
+          <div className="col-xs-6 col-sm-4 button-wrapper">
             <button type="button" className="btn btn-primary btn-lg btn-block" onClick={ this.handleSubmit.bind(this) }>Search</button>
           </div>
-          <div className="col-xs-4 col-sm-2">
+          <div className="col-xs-3 col-sm-2 button-wrapper">
             <button type="button" className="btn btn-info btn-lg btn-block" onClick={ this.props.showPlot }>
+            <div className="hidden-xs">
               Plot <span className="glyphicon glyphicon-align-left"></span>
+            </div>
+            <div className="visible-xs">
+              Plot
+            </div>
             </button>
           </div>
-          <div className="col-xs-4 col-sm-2 col-sm-offset-4">
+          <div className="col-xs-3 col-sm-2 col-sm-offset-4">
             <button type="button" className="btn btn-warning btn-lg btn-block" onClick={ this.handleClear.bind(this) }>Clear</button>
           </div>
         </div>
