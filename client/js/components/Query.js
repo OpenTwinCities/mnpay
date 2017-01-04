@@ -22,7 +22,16 @@ export default class Query extends React.Component {
   }
 
   showPlot() {
-    this.setState({showPlot: true});
+    var self = this;
+    self.setState({showPlot: true});
+    if (self.state.stats.length == 0) {
+      Request.get("/api/stats")
+             .query(self.state.filters)
+             .end(function(err, res){
+               self.setState({stats: res.body.hist});
+             });
+    }
+
   }
 
   hidePlot() {
@@ -45,6 +54,7 @@ export default class Query extends React.Component {
 
   updateQuery () {
     var self = this;
+    self.setState({stats: []});
     Request.get("/api/wages")
            .query(self.state.filters)
            .query({limit: 10})
@@ -65,11 +75,6 @@ export default class Query extends React.Component {
                self.setState({next_page: null});
              }
            })
-     Request.get("/api/stats")
-            .query(self.state.filters)
-            .end(function(err, res){
-              self.setState({stats: res.body.hist});
-            })
   }
 
   render() {
