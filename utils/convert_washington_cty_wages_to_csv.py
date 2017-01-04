@@ -1,4 +1,4 @@
-"""convert_mn_state_wages_to_csv.py
+"""convert_washington_cty_wages_to_csv.py
 
 Usage:
     convert_washington_cty_wages_to_csv.py <input_file> <output_file>
