@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { browserHistory, Router, Route } from 'react-router'
+import { browserHistory, Router, Route } from 'react-router';
 
 import Query from "./components/Query";
 
