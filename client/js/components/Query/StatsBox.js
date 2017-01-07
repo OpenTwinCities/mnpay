@@ -1,12 +1,11 @@
 import React from "react";
 
 import DistChart from "./StatsBox/DistChart";
-import { Modal, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 
 export default class StatsBox extends React.Component {
 
-  render() {
-
+  render () {
     return (
       <div>
         <Modal show={this.props.show}
@@ -23,3 +22,8 @@ export default class StatsBox extends React.Component {
     );
   }
 }
+StatsBox.propTypes = {
+  data: React.PropTypes.array.required,
+  onClose: React.PropTypes.function.required,
+  show: React.PropTypes.boolean.required
+};
