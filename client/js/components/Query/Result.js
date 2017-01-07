@@ -21,7 +21,6 @@ export default class ResultTable extends React.Component {
             </tr>
             {_data.map(function (object, i) {
               var numeralWage = new Numeral(object.wages);
-              console.log(numeralWage);
               return (<tr key={i}>
                         <td>
                           { object.first_name }
