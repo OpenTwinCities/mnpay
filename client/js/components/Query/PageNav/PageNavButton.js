@@ -2,16 +2,15 @@ import React from "react";
 
 export default class PageNavButton extends React.Component {
 
-  handleClick(e){
-    this.props.handleClick(this.props.pageValue)
+  handleClick (e) {
+    this.props.handleClick(this.props.pageValue);
   }
 
-  render() {
+  render () {
     var className;
-    if (this.props.displayText == "Previous") {
+    if (this.props.displayText === "Previous") {
       className = "previous";
-    }
-    else if (this.props.displayText == "Next") {
+    } else if (this.props.displayText === "Next") {
       className = "next";
     }
     return (
@@ -21,3 +20,8 @@ export default class PageNavButton extends React.Component {
     );
   }
 }
+PageNavButton.propTypes = {
+  displayText: React.PropTypes.string.required,
+  handleClick: React.PropTypes.function.required,
+  pageValue: React.PropTypes.int.required
+};
