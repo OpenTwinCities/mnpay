@@ -51,3 +51,9 @@ and then run
 $ docker-compose build oneoff
 $ docker-compose build web
 ```
+
+### Handy commands ###
+If you need to connect to a container for debugging use:
+```
+docker exec -it <container_id> /bin/bash
+```

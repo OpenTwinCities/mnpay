@@ -7,7 +7,7 @@ export default class DistChart extends React.Component {
 
   formatTick (value) {
     var numeralValue = new Numeral(value);
-    return numeralValue.format("0,0");
+    return "$" + numeralValue.format("0,0");
   }
 
   render () {
