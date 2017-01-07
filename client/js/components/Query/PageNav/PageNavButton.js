@@ -21,7 +21,7 @@ export default class PageNavButton extends React.Component {
   }
 }
 PageNavButton.propTypes = {
-  displayText: React.PropTypes.string.required,
-  handleClick: React.PropTypes.function.required,
-  pageValue: React.PropTypes.int.required
+  displayText: React.PropTypes.string.isRequired,
+  handleClick: React.PropTypes.func.isRequired,
+  pageValue: React.PropTypes.number.isRequired
 };

@@ -132,7 +132,8 @@ export default class Control extends React.Component {
     );
   }
 }
+
 Control.propTypes = {
-  handleSubmit: React.PropTypes.function.required,
-  showPlot: React.PropTypes.function.required
+  handleSubmit: React.PropTypes.func.isRequired,
+  showPlot: React.PropTypes.func.isRequired
 };

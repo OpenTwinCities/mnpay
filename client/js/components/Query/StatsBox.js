@@ -23,7 +23,7 @@ export default class StatsBox extends React.Component {
   }
 }
 StatsBox.propTypes = {
-  data: React.PropTypes.array.required,
-  onClose: React.PropTypes.function.required,
-  show: React.PropTypes.boolean.required
+  data: React.PropTypes.array.isRequired,
+  onClose: React.PropTypes.func.isRequired,
+  show: React.PropTypes.bool.isRequired
 };

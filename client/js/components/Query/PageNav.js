@@ -30,7 +30,7 @@ export default class PageNav extends React.Component {
   }
 }
 PageNav.propTypes = {
-  handlePageTransition: React.PropTypes.function.required,
-  next_page: React.PropTypes.int.required,
-  prev_page: React.PropTypes.int.required
+  handlePageTransition: React.PropTypes.func.isRequired,
+  next_page: React.PropTypes.number,
+  prev_page: React.PropTypes.number
 };
