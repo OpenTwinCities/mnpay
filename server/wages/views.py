@@ -81,7 +81,7 @@ def get_wages(request):
     return JsonResponse(_get_wages_serialized(request.GET))
 
 
-def _get_query_size_limit_to_use(query_params):
+def _get_query_size_limit(query_params):
     req_limit = _safe_cast(query_params.get("limit"),
                            int,
                            DEFAULT_LIMIT)
@@ -91,7 +91,7 @@ def _get_query_size_limit_to_use(query_params):
     return limit
 
 
-def _get_query_page_number_to_use(query_params, num_pages):
+def _get_query_page_number(query_params, num_pages):
     min_page = 1
     req_page = _safe_cast(query_params.get("page", 1),
                           int,
@@ -101,12 +101,12 @@ def _get_query_page_number_to_use(query_params, num_pages):
 
 
 def _get_wages_serialized(query_params):
-    limit = _get_query_size_limit_to_use(query_params)
+    limit = _get_query_size_limit(query_params)
     query = _construct_wage_query(query_params)
 
     paginator = Paginator(query, limit)
     total_pages = paginator.num_pages
-    page_number = _get_query_page_number_to_use(query_params, total_pages)
+    page_number = _get_query_page_number(query_params, total_pages)
     wages = paginator.page(page_number)
 
     result = [w for w in wages]
