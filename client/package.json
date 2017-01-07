@@ -1,7 +1,7 @@
 {
-  "name": "mnwages",
-  "version": "1.0.0",
-  "description": "",
+  "name": "mnpay",
+  "version": "0.1.0",
+  "description": "A client for searching, displaying, and visualizing wages.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
+    "eslint": "^3.13.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-react": "^6.8.0"
   }
