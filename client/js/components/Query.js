@@ -1,5 +1,6 @@
 import React from "react";
 import Request from "superagent";
+import Promise from "bluebird";
 
 import Result from "./Query/Result";
 import Control from "./Query/Control";
@@ -10,15 +11,17 @@ export default class Query extends React.Component {
   constructor ({ location: { query } }) {
     super();
     this.state = {
-      data: [],
+      wages: [],
       filters: query,
       stats: [],
-      showPlot: false
+      showPlot: false,
+      canPlot: false
     };
   }
 
   componentDidMount () {
-    this.updateQuery();
+    this.getLimits()
+      .then(this.updateQuery.bind(this));
   }
 
   componentWillReceiveProps ({ location: { query } }) {
@@ -31,6 +34,23 @@ export default class Query extends React.Component {
     this.setState({ filters: params }, this.updateQuery);
   }
 
+  getLimits () {
+    var self = this;
+    return new Promise(function (resolve, reject) {
+      Request.get("/api/limits")
+             .end(function (err, res) {
+               if (res.body.status === "Okay") {
+                 var limits = res.body.data;
+                 self.setState({
+                   queryLimit: limits.query_size_limit,
+                   statsLimit: limits.stats_limit
+                 });
+               }
+               resolve();
+             });
+    });
+  }
+
   showPlot () {
     var self = this;
     self.setState({ showPlot: true });
@@ -38,7 +58,9 @@ export default class Query extends React.Component {
       Request.get("/api/stats")
              .query(self.state.filters)
              .end(function (err, res) {
-               self.setState({ stats: res.body.hist });
+               if (res.body.status === "Okay") {
+                 self.setState({ stats: res.body.data.hist });
+               }
              });
     }
   }
@@ -60,18 +82,25 @@ export default class Query extends React.Component {
            .query(self.state.filters)
            .query({ limit: 10 })
            .end(function (err, res) {
-             self.setState({ data: res.body.data });
-             var curPage = parseInt(res.body.cur_page, 10);
-             var lastPage = parseInt(res.body.last_page, 10);
-             if (curPage > 1) {
-               self.setState({ prev_page: curPage - 1 });
-             } else {
-               self.setState({ prev_page: null });
-             }
-             if (curPage !== lastPage) {
-               self.setState({ next_page: curPage + 1 });
-             } else {
-               self.setState({ next_page: null });
+             if (res.body.status === "Okay") {
+               var data = res.body.data;
+               var newState = {};
+               newState["wages"] = data.wages;
+               newState["total"] = data.total_results;
+               var curPage = parseInt(data.cur_page, 10);
+               var lastPage = parseInt(data.last_page, 10);
+               if (curPage > 1) {
+                 newState["prevPage"] = curPage - 1;
+               } else {
+                 newState["prevPage"] = null;
+               }
+               if (curPage !== lastPage) {
+                 newState["nextPage"] = curPage + 1;
+               } else {
+                 newState["nextPage"] = null;
+               }
+               newState["canPlot"] = data.total_results < self.state.statsLimit;
+               self.setState(newState);
              }
            });
   }
@@ -81,14 +110,15 @@ export default class Query extends React.Component {
       <div>
         <Control filters={this.state.filters}
                  handleSubmit={this.filterChange.bind(this)}
-                 showPlot={this.showPlot.bind(this)}/>
-        <Result data={this.state.data}/>
+                 showPlot={this.showPlot.bind(this)}
+                 allowPlot={this.state.canPlot}/>
+        <Result data={this.state.wages}/>
         <StatsBox data={this.state.stats}
                   onClose={this.hidePlot.bind(this)}
                   show={this.state.showPlot}/>
         <PageNav handlePageTransition={this.pageChange.bind(this)}
-                 prev_page={this.state.prev_page}
-                 next_page={this.state.next_page}/>
+                 prev_page={this.state.prevPage}
+                 next_page={this.state.nextPage}/>
       </div>
     );
   }

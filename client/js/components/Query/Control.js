@@ -56,6 +56,12 @@ export default class Control extends React.Component {
 
 
   render () {
+    var plotDisable = "disable";
+    var plotHelpText = "Add additional search terms to enable plotting";
+    if (this.props.allowPlot) {
+      plotDisable = "";
+      plotHelpText = "";
+    }
     return (
       <form className="form-horizontal" onKeyPress={this.handleKeyPress.bind(this)} method="get">
         <div className="form-group">
@@ -113,7 +119,10 @@ export default class Control extends React.Component {
                 onClick={this.handleSubmit.bind(this)}>Search</button>
           </div>
           <div className="col-xs-3 col-sm-2 button-wrapper">
-            <button type="button" className="btn btn-info btn-lg btn-block"
+            <button type="button"
+                    className="btn btn-info btn-lg btn-block"
+                    disabled={plotDisable}
+                    title={plotHelpText}
                 onClick={this.props.showPlot}>
             <div className="hidden-xs">
               Plot <span className="glyphicon glyphicon-align-left" />
@@ -135,5 +144,6 @@ export default class Control extends React.Component {
 
 Control.propTypes = {
   handleSubmit: React.PropTypes.func.isRequired,
-  showPlot: React.PropTypes.func.isRequired
+  showPlot: React.PropTypes.func.isRequired,
+  allowPlot: React.PropTypes.bool.isRequired
 };
