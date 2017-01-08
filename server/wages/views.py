@@ -7,6 +7,7 @@ import logging
 from itertools import tee
 
 DEFAULT_LIMIT = 50
+STATS_LIMIT = 50000
 
 SINGLE_SIDED_QUERY_PARAMS = [
     "first_name",
@@ -110,12 +111,13 @@ def _get_wages_serialized(query_params):
     wages = paginator.page(page_number)
 
     result = [w for w in wages]
-    to_return = {
-        "data": [w.serialize() for w in result],
+    data = {
+        "wages": [w.serialize() for w in result],
     }
-    to_return["cur_page"] = wages.number
-    to_return["last_page"] = paginator.num_pages
-    return to_return
+    data["cur_page"] = wages.number
+    data["last_page"] = paginator.num_pages
+    data["total_results"] = query.count()
+    return {"status": "Okay", "data": data}
 
 
 def _safe_cast(val, to_type, default=None):
@@ -140,6 +142,11 @@ def get_query_stats(request):
 
 def _get_query_stats(query_params):
     query = _construct_wage_query(query_params)
+    if query.count() > STATS_LIMIT:
+        return {
+            "status": "Error",
+            "msg": "Query to large for server-side stats. Be more specific."
+        }
     wages = [float(wage.wage) for wage in query]
     counts, bins = histogram(wages, bins=20)
     counts = counts.tolist()
@@ -153,4 +160,16 @@ def _get_query_stats(query_params):
              "lower": edge_pair[0],
              "upper": edge_pair[1]}
         )
-    return result
+
+    return {"status": "Okay",
+            "data": result}
+
+
+def get_limits(request):
+    return JsonResponse({
+        "status": "Okay",
+        "data": {
+            "query_size_limit": DEFAULT_LIMIT,
+            "stats_limit": STATS_LIMIT
+        }
+    })
