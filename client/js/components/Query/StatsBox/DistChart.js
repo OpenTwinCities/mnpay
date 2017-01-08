@@ -12,21 +12,26 @@ export default class DistChart extends React.Component {
 
   render () {
     var min = Infinity;
+    var max = 0;
     var data = this.props.data.map(function (object, i) {
       var midpoint = (object.upper + object.lower) / 2;
       midpoint = Number(midpoint.toFixed(2));
       if (midpoint < min) {
         min = midpoint;
       }
+      if (midpoint > max) {
+        max = midpoint;
+      }
       return { x: midpoint, y: object.count };
     });
     var minDisplay = Math.max(Math.floor(min / 10000) * 10000 - 10000, 0);
+    var maxDisplay = Math.ceil(max / 10000) * 10000 + 10000;
     return (<ResponsiveContainer height={300}>
              <BarChart data={data}>
                <XAxis dataKey="x"
                       tickCount={10}
                       type="number"
-                      domain={[minDisplay, 'dataMax']}
+                      domain={[minDisplay, maxDisplay]}
                       tickFormatter={this.formatTick}/>
                <Bar dataKey="y"
                      fill="#82ca9d"/>
