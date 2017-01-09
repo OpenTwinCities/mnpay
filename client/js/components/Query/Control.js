@@ -65,12 +65,12 @@ export default class Control extends React.Component {
     return (
       <form className="form-horizontal" onKeyPress={this.handleKeyPress.bind(this)} method="get">
         <div className="form-group">
-          <div className="col-xs-6 col-sm-4">
+          <div className="col-sm-4">
             <label htmlFor="first_name">First name:</label>
             <input type="text" className="form-control" id="first_name" name="first_name"
                 onChange={this.onChange.bind(this)} value={this.state.first_name}/>
           </div>
-          <div className="col-xs-6 col-sm-4">
+          <div className="col-sm-4">
             <label htmlFor="last_name">Last name:</label>
             <input type="text" className="form-control" id="last_name" name="last_name"
                 onChange={this.onChange.bind(this)} value={this.state.last_name}/>
