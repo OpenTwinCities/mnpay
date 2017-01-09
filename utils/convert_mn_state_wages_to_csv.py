@@ -36,11 +36,12 @@ def main(input_file, output_file, year):
     joined["ALLWAGES"] = (joined["REGWAGES"] +
                           joined["OTWAGES"] +
                           joined["OTHERWAGES"])
-    refined = joined[["EMPLT_AGENCY_NM",
-                      "DEPT_NM",
+    joined["GOV"] = "MN State"
+    refined = joined[["GOV",
+                      "EMPLT_AGENCY_NM",
                       "JOB_DESC",
                       "ALLWAGES"]]
-    refined.columns = ["AGENCY", "DEPT", "TITLE", "WAGES"]
+    refined.columns = ["GOV", "DEPT", "TITLE", "WAGES"]
     empl_nm = _split_name_col(joined["EMPL_NM"])
     refined = pd.concat([refined, empl_nm], axis=1)
     refined["YEAR"] = [year] * len(refined)

@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.db.utils import IntegrityError
-from wages.models import Wage, Title, Department, Agency
+from wages.models import Wage, Title, Department, Government
 import pandas as pd
 
 
@@ -15,7 +15,7 @@ class Command(BaseCommand):
             df = pd.read_csv(input_file)
             entries = []
             for i, row in df.iterrows():
-                agency, _ = Agency.objects.get_or_create(name=row['AGENCY'])
+                gov, _ = Government.objects.get_or_create(name=row['AGENCY'])
                 dept, _ = Department.objects.get_or_create(name=row['DEPT'])
                 title, _ = Title.objects.get_or_create(name=row['TITLE'])
                 first_name = row['FIRST_NAME']
@@ -29,7 +29,7 @@ class Command(BaseCommand):
                         first_name=row['FIRST_NAME'],
                         middle_name=row['MIDDLE_NAME'],
                         last_name=row['LAST_NAME'],
-                        agency=agency,
+                        government=gov,
                         dept=dept,
                         title=title,
                         wage=round(row['WAGES'], 2),

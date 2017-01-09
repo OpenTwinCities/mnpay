@@ -6,7 +6,7 @@ export default class Control extends React.Component {
     this.state = {
       first_name: "",
       last_name: "",
-      agency: "",
+      government: "",
       dept: "",
       title: "",
       sortby: "wage",
@@ -22,7 +22,7 @@ export default class Control extends React.Component {
     var filters = {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
-      agency: this.state.agency,
+      government: this.state.government,
       dept: this.state.dept,
       title: this.state.title,
       sortby: this.state.sortby,
@@ -40,7 +40,7 @@ export default class Control extends React.Component {
     this.setState({
       first_name: "",
       last_name: "",
-      agency: "",
+      government: "",
       dept: "",
       title: "",
       sortby: "wage",
@@ -83,9 +83,9 @@ export default class Control extends React.Component {
         </div>
         <div className="form-group">
           <div className="col-sm-4">
-            <label htmlFor="agency">Agency:</label>
-            <input type="text" className="form-control" id="agency" name="agency"
-                onChange={this.onChange.bind(this)} value={this.state.agency}/>
+            <label htmlFor="government">Government:</label>
+            <input type="text" className="form-control" id="government" name="government"
+                onChange={this.onChange.bind(this)} value={this.state.government}/>
           </div>
           <div className="col-sm-4">
             <label htmlFor="dept">Dept:</label>
@@ -97,7 +97,7 @@ export default class Control extends React.Component {
             <select className="form-control" id="sortby" value={this.state.sortby} onChange={this.onChange.bind(this)}>
               <option value="first_name">First name</option>
               <option value="last_name">Last name</option>
-              <option value="agency">Agency</option>
+              <option value="government">Government</option>
               <option value="dept">Dept</option>
               <option value="title">Title</option>
               <option value="wage">Wage</option>
