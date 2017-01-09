@@ -1,7 +1,7 @@
 {
-  "name": "mnwages",
-  "version": "1.0.0",
-  "description": "",
+  "name": "mnpay",
+  "version": "0.1.0",
+  "description": "A client for searching, displaying, and visualizing wages.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -20,11 +20,20 @@
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
+    "bluebird": "^3.4.7",
     "numeral": "^1.5.3",
     "react": "^15.3.2",
+    "react-bootstrap": "^0.30.7",
     "react-dom": "^15.3.2",
     "react-router": "^3.0.0",
+    "recharts": "^0.20.1",
     "superagent": "^2.3.0",
     "webpack": "^1.13.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.13.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-plugin-react": "^6.8.0"
   }
 }

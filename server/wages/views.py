@@ -2,9 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from wages.models import Wage
-
+from numpy import histogram
+import logging
+from itertools import tee
 
 DEFAULT_LIMIT = 50
+STATS_LIMIT = 50000
 
 SINGLE_SIDED_QUERY_PARAMS = [
     "first_name",
@@ -31,6 +34,13 @@ DIRECTIONS = {
     "desc": "-",
     "asc": ""
 }
+
+
+def pairwise(iterable):
+    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    a, b = tee(iterable)
+    next(b, None)
+    return zip(a, b)
 
 
 def _construct_wage_query(query_params):
@@ -72,30 +82,42 @@ def get_wages(request):
     return JsonResponse(_get_wages_serialized(request.GET))
 
 
-def _get_wages_serialized(query_params):
+def _get_query_size_limit(query_params):
     req_limit = _safe_cast(query_params.get("limit"),
                            int,
                            DEFAULT_LIMIT)
     if req_limit < 1:
         req_limit = DEFAULT_LIMIT
     limit = min(req_limit, DEFAULT_LIMIT)
-    query = _construct_wage_query(query_params)
-    paginator = Paginator(query, limit)
+    return limit
 
+
+def _get_query_page_number(query_params, num_pages):
     min_page = 1
     req_page = _safe_cast(query_params.get("page", 1),
                           int,
                           min_page)
-    page_number = _shift_to_interval(req_page, min_page, paginator.num_pages)
+    page_number = _shift_to_interval(req_page, min_page, num_pages)
+    return page_number
+
+
+def _get_wages_serialized(query_params):
+    limit = _get_query_size_limit(query_params)
+    query = _construct_wage_query(query_params)
+
+    paginator = Paginator(query, limit)
+    total_pages = paginator.num_pages
+    page_number = _get_query_page_number(query_params, total_pages)
     wages = paginator.page(page_number)
 
     result = [w for w in wages]
-    to_return = {
-        "data": [w.serialize() for w in result],
+    data = {
+        "wages": [w.serialize() for w in result],
     }
-    to_return["cur_page"] = wages.number
-    to_return["last_page"] = paginator.num_pages
-    return to_return
+    data["cur_page"] = wages.number
+    data["last_page"] = paginator.num_pages
+    data["total_results"] = query.count()
+    return {"status": "Okay", "data": data}
 
 
 def _safe_cast(val, to_type, default=None):
@@ -111,3 +133,43 @@ def _shift_to_interval(val, min_point, max_point):
     elif val > max_point:
         val = max_point
     return val
+
+
+def get_query_stats(request):
+    rsp = _get_query_stats(request.GET)
+    return JsonResponse(rsp)
+
+
+def _get_query_stats(query_params):
+    query = _construct_wage_query(query_params)
+    if query.count() > STATS_LIMIT:
+        return {
+            "status": "Error",
+            "msg": "Query to large for server-side stats. Be more specific."
+        }
+    wages = [float(wage.wage) for wage in query]
+    counts, bins = histogram(wages, bins=20)
+    counts = counts.tolist()
+    bins = bins.tolist()
+    edges = pairwise(bins)
+
+    result = {"hist": []}
+    for count, edge_pair in zip(counts, edges):
+        result["hist"].append(
+            {"count": count,
+             "lower": edge_pair[0],
+             "upper": edge_pair[1]}
+        )
+
+    return {"status": "Okay",
+            "data": result}
+
+
+def get_limits(request):
+    return JsonResponse({
+        "status": "Okay",
+        "data": {
+            "query_size_limit": DEFAULT_LIMIT,
+            "stats_limit": STATS_LIMIT
+        }
+    })

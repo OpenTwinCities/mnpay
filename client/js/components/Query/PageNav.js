@@ -1,31 +1,36 @@
 import React from "react";
 
-import PageNavButton from "./PageNav/PageNavButton"
+import PageNavButton from "./PageNav/PageNavButton";
 
 export default class PageNav extends React.Component {
 
-  render() {
-    var prev_button;
-    var next_button;
+  render () {
+    var prevButton;
+    var nextButton;
     if (this.props.prev_page) {
-      prev_button = <PageNavButton
+      prevButton = (<PageNavButton
                      handleClick={this.props.handlePageTransition}
                      displayText="Previous"
-                     pageValue={this.props.prev_page}/>
+                     pageValue={this.props.prev_page}/>);
     }
     if (this.props.next_page) {
-      next_button = <PageNavButton
+      nextButton = (<PageNavButton
                      handleClick={this.props.handlePageTransition}
                      displayText="Next"
-                     pageValue={this.props.next_page}/>
+                     pageValue={this.props.next_page}/>);
     }
     return (
       <nav aria-label="...">
         <ul className="pager">
-          {prev_button}
-          {next_button}
+          {prevButton}
+          {nextButton}
         </ul>
       </nav>
     );
   }
 }
+PageNav.propTypes = {
+  handlePageTransition: React.PropTypes.func.isRequired,
+  next_page: React.PropTypes.number,
+  prev_page: React.PropTypes.number
+};

@@ -1,12 +1,12 @@
 import React from "react";
 
-import Numeral from "numeral"
+import Numeral from "numeral";
 
 export default class ResultTable extends React.Component {
-  render() {
+  render () {
     var _data = this.props.data;
     return (
-      <div class="table-responsive">
+      <div className="table-responsive">
         <table className="table ">
           <tbody>
             <tr>
@@ -19,8 +19,9 @@ export default class ResultTable extends React.Component {
               <th>Wages</th>
               <th>Year</th>
             </tr>
-            {_data.map(function(object, i){
-               return <tr key={i}>
+            {_data.map(function (object, i) {
+              var numeralWage = new Numeral(object.wages);
+              return (<tr key={i}>
                         <td>
                           { object.first_name }
                         </td>
@@ -40,16 +41,19 @@ export default class ResultTable extends React.Component {
                           { object.title }
                         </td>
                         <td>
-                          { "$" + Numeral(object.wages).format("0,0.00") }
+                          { "$" + numeralWage.format("0,0.00") }
                         </td>
                         <td>
                           { object.year }
                         </td>
-                      </tr>;
-             })}
+                      </tr>);
+            })}
           </tbody>
         </table>
       </div>
     );
   }
 }
+ResultTable.propTypes = {
+  data: React.PropTypes.array.isRequired
+};
