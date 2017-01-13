@@ -14,7 +14,7 @@ export default class ResultTable extends React.Component {
               <th>Middle Name</th>
               <th>Last Name</th>
               <th>Government</th>
-              <th>Dept</th>
+              <th>Agency</th>
               <th>Title</th>
               <th>Wages</th>
               <th>Year</th>
@@ -35,7 +35,7 @@ export default class ResultTable extends React.Component {
                           { object.government }
                         </td>
                         <td>
-                          { object.dept }
+                          { object.agency }
                         </td>
                         <td>
                           { object.title }

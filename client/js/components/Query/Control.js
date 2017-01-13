@@ -7,7 +7,7 @@ export default class Control extends React.Component {
       first_name: "",
       last_name: "",
       government: "",
-      dept: "",
+      agency: "",
       title: "",
       sortby: "wage",
       direction: "desc"
@@ -23,7 +23,7 @@ export default class Control extends React.Component {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
       government: this.state.government,
-      dept: this.state.dept,
+      agency: this.state.agency,
       title: this.state.title,
       sortby: this.state.sortby,
       direction: this.state.direction
@@ -41,7 +41,7 @@ export default class Control extends React.Component {
       first_name: "",
       last_name: "",
       government: "",
-      dept: "",
+      agency: "",
       title: "",
       sortby: "wage",
       direction: "desc"
@@ -88,9 +88,9 @@ export default class Control extends React.Component {
                 onChange={this.onChange.bind(this)} value={this.state.government}/>
           </div>
           <div className="col-sm-4">
-            <label htmlFor="dept">Dept:</label>
-            <input type="text" className="form-control" id="dept" name="dept"
-                onChange={this.onChange.bind(this)} value={this.state.dept}/>
+            <label htmlFor="agency">Agency:</label>
+            <input type="text" className="form-control" id="agency" name="agency"
+                onChange={this.onChange.bind(this)} value={this.state.agency}/>
           </div>
           <div className="col-xs-6 col-sm-2">
             <label htmlFor="sortby">Order by:</label>

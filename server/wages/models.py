@@ -8,6 +8,13 @@ class Government(models.Model):
         return self.name
 
 
+class Agency(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.name
+
+
 class Department(models.Model):
     name = models.CharField(max_length=128)
 
@@ -29,6 +36,9 @@ class Wage(models.Model):
     government = models.ForeignKey(Government,
                                    db_index=True,
                                    on_delete=models.CASCADE)
+    agency = models.ForeignKey(Agency,
+                               db_index=True,
+                               on_delete=models.CASCADE)
     dept = models.ForeignKey(Department,
                              db_index=True,
                              on_delete=models.CASCADE)
@@ -42,6 +52,7 @@ class Wage(models.Model):
             "last_name": self.last_name,
             "middle_name": self.middle_name,
             "government": self.government.name,
+            "agency": self.agency.name,
             "dept": self.dept.name,
             "title": self.title.name,
             "wages": self.wage,
@@ -62,4 +73,5 @@ class Wage(models.Model):
                            "government",
                            "dept",
                            "title",
-                           "year",)
+                           "wage",
+                           "year")

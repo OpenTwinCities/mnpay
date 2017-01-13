@@ -15,6 +15,7 @@ SINGLE_SIDED_QUERY_PARAMS = [
 ]
 FOREIGN_QUERY_PARAMS = [
     "government",
+    "agency",
     "dept",
     "title",
 ]
@@ -23,6 +24,7 @@ STRICT_QUERY_PARAMS = [
 ]
 SORTABLE_FIELDS = [
     "government",
+    "agency",
     "dept",
     "first_name",
     "last_name",
