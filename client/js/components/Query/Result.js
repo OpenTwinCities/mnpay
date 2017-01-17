@@ -13,8 +13,8 @@ export default class ResultTable extends React.Component {
               <th>First Name</th>
               <th>Middle Name</th>
               <th>Last Name</th>
+              <th>Government</th>
               <th>Agency</th>
-              <th>Dept</th>
               <th>Title</th>
               <th>Wages</th>
               <th>Year</th>
@@ -32,10 +32,10 @@ export default class ResultTable extends React.Component {
                           { object.last_name }
                         </td>
                         <td>
-                          { object.agency }
+                          { object.government }
                         </td>
                         <td>
-                          { object.dept }
+                          { object.agency }
                         </td>
                         <td>
                           { object.title }

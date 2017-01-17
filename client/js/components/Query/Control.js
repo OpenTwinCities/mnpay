@@ -6,8 +6,8 @@ export default class Control extends React.Component {
     this.state = {
       first_name: "",
       last_name: "",
+      government: "",
       agency: "",
-      dept: "",
       title: "",
       sortby: "wage",
       direction: "desc"
@@ -22,8 +22,8 @@ export default class Control extends React.Component {
     var filters = {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
+      government: this.state.government,
       agency: this.state.agency,
-      dept: this.state.dept,
       title: this.state.title,
       sortby: this.state.sortby,
       direction: this.state.direction
@@ -40,8 +40,8 @@ export default class Control extends React.Component {
     this.setState({
       first_name: "",
       last_name: "",
+      government: "",
       agency: "",
-      dept: "",
       title: "",
       sortby: "wage",
       direction: "desc"
@@ -83,21 +83,21 @@ export default class Control extends React.Component {
         </div>
         <div className="form-group">
           <div className="col-sm-4">
+            <label htmlFor="government">Government:</label>
+            <input type="text" className="form-control" id="government" name="government"
+                onChange={this.onChange.bind(this)} value={this.state.government}/>
+          </div>
+          <div className="col-sm-4">
             <label htmlFor="agency">Agency:</label>
             <input type="text" className="form-control" id="agency" name="agency"
                 onChange={this.onChange.bind(this)} value={this.state.agency}/>
-          </div>
-          <div className="col-sm-4">
-            <label htmlFor="dept">Dept:</label>
-            <input type="text" className="form-control" id="dept" name="dept"
-                onChange={this.onChange.bind(this)} value={this.state.dept}/>
           </div>
           <div className="col-xs-6 col-sm-2">
             <label htmlFor="sortby">Order by:</label>
             <select className="form-control" id="sortby" value={this.state.sortby} onChange={this.onChange.bind(this)}>
               <option value="first_name">First name</option>
               <option value="last_name">Last name</option>
-              <option value="agency">Agency</option>
+              <option value="government">Government</option>
               <option value="dept">Dept</option>
               <option value="title">Title</option>
               <option value="wage">Wage</option>
