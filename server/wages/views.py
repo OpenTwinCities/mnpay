@@ -137,22 +137,22 @@ def _shift_to_interval(val, min_point, max_point):
     return val
 
 
-def get_query_stats(request):
-    rsp = _get_query_stats(request.GET)
+def get_wage_list(request):
+    rsp = _get_wage_list(request.GET)
     return JsonResponse(rsp)
 
 
-def _get_query_stats(query_params):
+def _get_wage_list(query_params):
     query = _construct_wage_query(query_params)
     if query.count() > STATS_LIMIT:
         return {
             "status": "Error",
-            "msg": "Query to large for server-side stats. Be more specific."
+            "msg": "Query to large for wage list. Be more specific."
         }
     wages = [float(wage.wage) for wage in query]
 
     result = {"wages": wages}
-    
+
     return {"status": "Okay",
             "data": result}
 

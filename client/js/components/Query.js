@@ -55,7 +55,7 @@ export default class Query extends React.Component {
     var self = this;
     self.setState({ showPlot: true });
     if (self.state.stats.length === 0) {
-      Request.get("/api/stats")
+      Request.get("/api/wage_list")
              .query(self.state.filters)
              .end(function (err, res) {
                if (res.body.status === "Okay") {
