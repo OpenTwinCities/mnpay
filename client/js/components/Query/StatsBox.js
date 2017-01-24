@@ -4,9 +4,15 @@ import DistChart from "./StatsBox/DistChart";
 import { Modal } from 'react-bootstrap';
 
 export default class StatsBox extends React.Component {
+  constructor () {
+    super();
+    this.state = {
+      buckets: 25
+    };
+  }
 
-  handleChange (event) {
-    this.render();
+  handleChange (e) {
+    this.setState({ buckets: parseInt(e.target.value, 10) });
   }
 
   render () {
@@ -17,14 +23,21 @@ export default class StatsBox extends React.Component {
                bsSize="large" >
           <Modal.Header closeButton>
             <Modal.Title>Salary Distribution</Modal.Title>
-            <select value={this.props.buckets} onChange={this.handleChange}>
-              <option value="20">20</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
           </Modal.Header>
           <Modal.Body>
-            <DistChart data={this.props.data} />
+            <form className="form-inline">
+              <div className="form-group col-sm-offset-1">
+                <select id="buckets" className="form-control"
+                    value={this.state.buckets} onChange={this.handleChange.bind(this)}>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="75">75</option>
+                  <option value="100">100</option>
+                </select>
+                <label htmlFor="buckets">&nbsp;Buckets</label>
+              </div>
+            </form>
+            <DistChart data={this.props.data} buckets={this.state.buckets} />
           </Modal.Body>
         </Modal>
       </div>
@@ -32,7 +45,6 @@ export default class StatsBox extends React.Component {
   }
 }
 StatsBox.propTypes = {
-  buckets: React.PropTypes.number,
   data: React.PropTypes.array.isRequired,
   onClose: React.PropTypes.func.isRequired,
   show: React.PropTypes.bool.isRequired

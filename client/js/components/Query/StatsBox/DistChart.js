@@ -10,18 +10,11 @@ export default class DistChart extends React.Component {
     return "$" + numeralValue.format("0,0");
   }
 
-  render () {
-    var BUCKETS = this.props.buckets || 20;
-    var histData = [];
+  findBoundaries () {
     var i;
-    for (i = 0; i < BUCKETS; i++) {
-      histData.push(0);
-    }
-
     var minVal = Infinity;
     var maxVal = 0;
     var data = this.props.data;
-    console.log(this.props.data);
     for (i = 0; i < data.length; i++) {
       if (data[i] < minVal) {
         minVal = data[i];
@@ -30,18 +23,31 @@ export default class DistChart extends React.Component {
         maxVal = data[i];
       }
     }
+    return { minVal: minVal, maxVal: maxVal };
+  }
+
+  render () {
+    var boundaries = this.findBoundaries();
+
+    var minVal = boundaries.minVal;
+    var maxVal = boundaries.maxVal;
+    var buckets = this.props.buckets;
+    var data = this.props.data;
 
     var minDisplay = Math.max(Math.floor(minVal / 10000) * 10000 - 10000, 0);
     var maxDisplay = Math.ceil(maxVal / 10000) * 10000 + 10000;
-    var bucketSize = (maxVal - minVal) / BUCKETS;
+    var bucketSize = Math.ceil((maxVal - minVal) / buckets);
+    var histData = [];
+    var midpoint;
+    var i;
 
-    for (i = 0; i < data.length; i++) {
-      histData[Math.floor((data[i] - minVal) / bucketSize)]++;
+    for (i = 0; i < buckets; i++) {
+      midpoint = minVal + (i + 0.5) * bucketSize;
+      histData.push({ x: midpoint, y: 0 });
     }
 
-    for (i = 0; i < histData.length; i++) {
-      var midpoint = minVal + (i + 0.5) * bucketSize;
-      histData[i] = { x: midpoint, y: histData[i] };
+    for (i = 0; i < data.length; i++) {
+      histData[Math.floor((data[i] - minVal) / bucketSize)].y++;
     }
 
     return (<ResponsiveContainer height={300}>
@@ -60,6 +66,6 @@ export default class DistChart extends React.Component {
   }
 }
 DistChart.propTypes = {
-  buckets: React.PropTypes.number,
+  buckets: React.PropTypes.number.isRequired,
   data: React.PropTypes.array.isRequired
 };
