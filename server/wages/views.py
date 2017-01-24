@@ -150,19 +150,9 @@ def _get_query_stats(query_params):
             "msg": "Query to large for server-side stats. Be more specific."
         }
     wages = [float(wage.wage) for wage in query]
-    counts, bins = histogram(wages, bins=20)
-    counts = counts.tolist()
-    bins = bins.tolist()
-    edges = pairwise(bins)
 
-    result = {"hist": []}
-    for count, edge_pair in zip(counts, edges):
-        result["hist"].append(
-            {"count": count,
-             "lower": edge_pair[0],
-             "upper": edge_pair[1]}
-        )
-
+    result = {"wages": wages}
+    
     return {"status": "Okay",
             "data": result}
 

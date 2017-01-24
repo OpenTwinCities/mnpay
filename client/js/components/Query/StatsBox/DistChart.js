@@ -11,23 +11,41 @@ export default class DistChart extends React.Component {
   }
 
   render () {
-    var min = Infinity;
-    var max = 0;
-    var data = this.props.data.map(function (object, i) {
-      var midpoint = (object.upper + object.lower) / 2;
-      midpoint = Number(midpoint.toFixed(2));
-      if (midpoint < min) {
-        min = midpoint;
+    var BUCKETS = this.props.buckets || 20;
+    var histData = [];
+    var i;
+    for (i = 0; i < BUCKETS; i++) {
+      histData.push(0);
+    }
+
+    var minVal = Infinity;
+    var maxVal = 0;
+    var data = this.props.data;
+    console.log(this.props.data);
+    for (i = 0; i < data.length; i++) {
+      if (data[i] < minVal) {
+        minVal = data[i];
       }
-      if (midpoint > max) {
-        max = midpoint;
+      if (data[i] > maxVal) {
+        maxVal = data[i];
       }
-      return { x: midpoint, y: object.count };
-    });
-    var minDisplay = Math.max(Math.floor(min / 10000) * 10000 - 10000, 0);
-    var maxDisplay = Math.ceil(max / 10000) * 10000 + 10000;
+    }
+
+    var minDisplay = Math.max(Math.floor(minVal / 10000) * 10000 - 10000, 0);
+    var maxDisplay = Math.ceil(maxVal / 10000) * 10000 + 10000;
+    var bucketSize = (maxVal - minVal) / BUCKETS;
+
+    for (i = 0; i < data.length; i++) {
+      histData[Math.floor((data[i] - minVal) / bucketSize)]++;
+    }
+
+    for (i = 0; i < histData.length; i++) {
+      var midpoint = minVal + (i + 0.5) * bucketSize;
+      histData[i] = { x: midpoint, y: histData[i] };
+    }
+
     return (<ResponsiveContainer height={300}>
-             <BarChart data={data}>
+             <BarChart data={histData}>
                <XAxis dataKey="x"
                       tickCount={10}
                       type="number"
@@ -42,5 +60,6 @@ export default class DistChart extends React.Component {
   }
 }
 DistChart.propTypes = {
+  buckets: React.PropTypes.number,
   data: React.PropTypes.array.isRequired
 };

@@ -59,7 +59,7 @@ export default class Query extends React.Component {
              .query(self.state.filters)
              .end(function (err, res) {
                if (res.body.status === "Okay") {
-                 self.setState({ stats: res.body.data.hist });
+                 self.setState({ stats: res.body.data.wages });
                }
              });
     }
