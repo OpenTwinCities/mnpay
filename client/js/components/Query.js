@@ -13,7 +13,7 @@ export default class Query extends React.Component {
     this.state = {
       wages: [],
       filters: query,
-      stats: [],
+      wageList: [],
       showPlot: false,
       canPlot: false
     };
@@ -54,12 +54,12 @@ export default class Query extends React.Component {
   showPlot () {
     var self = this;
     self.setState({ showPlot: true });
-    if (self.state.stats.length === 0) {
+    if (self.state.wageList.length === 0) {
       Request.get("/api/wage_list")
              .query(self.state.filters)
              .end(function (err, res) {
                if (res.body.status === "Okay") {
-                 self.setState({ stats: res.body.data.wages });
+                 self.setState({ wageList: res.body.data.wages });
                }
              });
     }
@@ -113,7 +113,7 @@ export default class Query extends React.Component {
                  showPlot={this.showPlot.bind(this)}
                  allowPlot={this.state.canPlot}/>
         <Result data={this.state.wages}/>
-        <StatsBox data={this.state.stats}
+        <StatsBox data={this.state.wageList}
                   onClose={this.hidePlot.bind(this)}
                   show={this.state.showPlot}/>
         <PageNav handlePageTransition={this.pageChange.bind(this)}
