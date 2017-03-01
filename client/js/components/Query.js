@@ -1,6 +1,7 @@
 import React from "react";
 import Request from "superagent";
 import Promise from "bluebird";
+import objectAssign from "object-assign";
 
 import Result from "./Query/Result";
 import Control from "./Query/Control";
@@ -29,7 +30,7 @@ export default class Query extends React.Component {
   }
 
   filterChange (filters) {
-    var params = Object.assign(filters, { page: 1 });
+    var params = objectAssign(filters, { page: 1 });
     this.props.router.push({ query: params });
     this.setState({ filters: params }, this.updateQuery);
   }
@@ -70,7 +71,7 @@ export default class Query extends React.Component {
   }
 
   pageChange (pageNumber) {
-    var params = Object.assign(this.state.filters, { page: pageNumber });
+    var params = objectAssign(this.state.filters, { page: pageNumber });
     this.props.router.push({ query: params });
     this.setState({ filters: params }, this.updateQuery);
   }
