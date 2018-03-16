@@ -1,10 +1,11 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
+from rest_framework import routers
+from wages import views
 
-from . import views
+router = routers.DefaultRouter()
+router.register(r'wages', views.WageViewSet)
 
 app_name = "wages"
 urlpatterns = [
-    url(r'^wages$', views.get_wages, name='get_wages'),
-    url(r'^wage_list$', views.get_wage_list, name='get_wage_list'),
-    url(r'^limits$', views.get_limits, name='get_limits')
+    url(r'^', include(router.urls)),
 ]

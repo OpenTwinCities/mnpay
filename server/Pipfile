@@ -1,0 +1,19 @@
+[[source]]
+
+name = "pypi"
+verify_ssl = true
+url = "https://pypi.python.org/simple"
+
+
+[packages]
+
+djangorestframework = "*"
+markdown = "*"
+django-filter = "*"
+django = "*"
+docopt = "*"
+
+
+[dev-packages]
+
+pudb = "*"

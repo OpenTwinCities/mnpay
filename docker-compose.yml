@@ -25,7 +25,7 @@ services:
       - SECRET_KEY=${SECRET_KEY}
     restart: always
     build: ./server
-    command: /usr/local/bin/gunicorn -w 2 -b :8000 server.wsgi
+    command: /usr/local/bin/gunicorn -w 2 -b :8000 config.wsgi
     volumes:
       - ./server:/usr/src/app
     depends_on:
