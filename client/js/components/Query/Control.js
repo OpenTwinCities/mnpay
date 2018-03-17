@@ -118,21 +118,7 @@ export default class Control extends React.Component {
             <button type="button" className="btn btn-primary btn-lg btn-block"
                 onClick={this.handleSubmit.bind(this)}>Search</button>
           </div>
-          <div className="col-xs-3 col-sm-2 button-wrapper">
-            <button type="button"
-                    className="btn btn-info btn-lg btn-block"
-                    disabled={plotDisable}
-                    title={plotHelpText}
-                onClick={this.props.showPlot}>
-            <div className="hidden-xs">
-              Plot <span className="glyphicon glyphicon-align-left" />
-            </div>
-            <div className="visible-xs">
-              Plot
-            </div>
-            </button>
-          </div>
-          <div className="col-xs-3 col-sm-2 col-sm-offset-4">
+          <div className="col-xs-6 col-sm-2 col-sm-offset-6">
             <button type="button" className="btn btn-warning btn-lg btn-block"
                 onClick={this.handleClear.bind(this)}>Clear</button>
           </div>
