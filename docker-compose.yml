@@ -27,7 +27,7 @@ services:
     build: ./server
     command: /usr/local/bin/gunicorn -w 2 -b :8000 config.wsgi
     volumes:
-      - ./server:/usr/src/app
+      - ./server:/app
     depends_on:
       - db
   nginx:

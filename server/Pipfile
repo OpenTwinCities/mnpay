@@ -17,3 +17,4 @@ docopt = "*"
 [dev-packages]
 
 pudb = "*"
+docker-compose = "*"
