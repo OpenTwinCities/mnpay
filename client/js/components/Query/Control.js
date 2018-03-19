@@ -9,7 +9,7 @@ export default class Control extends React.Component {
       government: "",
       agency: "",
       title: "",
-      sortby: "wage",
+      order: "wage",
       direction: "desc"
     };
   }
@@ -19,14 +19,17 @@ export default class Control extends React.Component {
   }
 
   handleSubmit (e) {
+    var direction_sign = "";
+    if (this.state.direction === "desc") {
+      direction_sign = "-"
+    }
     var filters = {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
       government: this.state.government,
       agency: this.state.agency,
       title: this.state.title,
-      sortby: this.state.sortby,
-      direction: this.state.direction
+      order: direction_sign + this.state.order
     };
     Object.keys(filters).forEach(function (key) {
       if (filters[key] === "") {
@@ -43,7 +46,7 @@ export default class Control extends React.Component {
       government: "",
       agency: "",
       title: "",
-      sortby: "wage",
+      order: "wage",
       direction: "desc"
     }, this.handleSubmit);
   }
@@ -93,8 +96,8 @@ export default class Control extends React.Component {
                 onChange={this.onChange.bind(this)} value={this.state.agency}/>
           </div>
           <div className="col-xs-6 col-sm-2">
-            <label htmlFor="sortby">Order by:</label>
-            <select className="form-control" id="sortby" value={this.state.sortby} onChange={this.onChange.bind(this)}>
+            <label htmlFor="order">Order by:</label>
+            <select className="form-control" id="order" value={this.state.order} onChange={this.onChange.bind(this)}>
               <option value="first_name">First name</option>
               <option value="last_name">Last name</option>
               <option value="government">Government</option>
@@ -130,6 +133,5 @@ export default class Control extends React.Component {
 
 Control.propTypes = {
   handleSubmit: React.PropTypes.func.isRequired,
-  showPlot: React.PropTypes.func.isRequired,
   allowPlot: React.PropTypes.bool.isRequired
 };
