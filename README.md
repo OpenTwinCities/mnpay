@@ -50,10 +50,8 @@ First run `docker-compose up` and `python manage.py loadwages ../resources` to
 gather static files, build the client, and load in the data.
 
 ```
-cd nginx
 docker save -o mnpay_nginx.image mnpay_nginx
 scp mnpay_nginx.image <remote_server>/<remote_path>
-cd ../server
 docker save -o mnpay_web.image mnpay_web
 scp mnpay_web.image <remote_server>/<remote_path>
 ```
