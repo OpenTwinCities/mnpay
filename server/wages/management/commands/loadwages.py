@@ -7,12 +7,25 @@ from wages import models
 from . import extractors
 
 
-object_buff = defaultdict(dict)
-
-def buffered_get_or_create(cls, name):
-    if name not in object_buff[cls.__name__]:
-        object_buff[cls.__name__][name] = cls.objects.create(name=name)
-    return object_buff[cls.__name__][name]
+def bulk_create_supporting(data):
+    supporting_models = {
+        models.Government: 'government',
+        models.Agency: 'agency',
+        models.Department: 'dept',
+        models.Title: 'title'
+    }
+    records = {}
+    for sup_model, field in supporting_models.items():
+        names = {
+            getattr(item, field)
+            for item in data
+            if getattr(item, field) is not None
+        }
+        model_instances = [sup_model(name=name) for name in names]
+        sup_model.objects.bulk_create(model_instances)
+        created = sup_model.objects.all()
+        records[sup_model.__name__] = {item.name: item for item in created}
+    return records
 
 
 def clear_entries():
@@ -36,13 +49,14 @@ class Command(BaseCommand):
 
         entries = []
         records = set(extractors.load_all(resource_path))
+        buffered_models = bulk_create_supporting(records)
         for i, row in enumerate(records):
             if i % 1000 == 0:
                 self.stdout.write("{0}/{1}".format(i, len(records)))
-            gov = buffered_get_or_create(models.Government, row.government)
-            agency = buffered_get_or_create(models.Agency, row.agency)
-            dept = buffered_get_or_create(models.Department, row.dept)
-            title = buffered_get_or_create(models.Title, row.title)
+            gov = buffered_models[models.Government.__name__][row.government]
+            agency = buffered_models[models.Agency.__name__][row.agency]
+            dept = buffered_models[models.Department.__name__][row.dept]
+            title = buffered_models[models.Title.__name__][row.title]
             first_name = row.first_name
             middle_name = row.middle_name
             last_name = row.last_name

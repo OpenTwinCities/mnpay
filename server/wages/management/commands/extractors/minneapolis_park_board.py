@@ -13,9 +13,9 @@ def _transform_row(raw_row, year):
     first, *possible_middle = first_middle.rsplit(' ', 1)
     middle = possible_middle[0] if len(possible_middle) > 0 else ''
     return utils.Wage(**{
-        'first_name': first,
-        'last_name': last,
-        'middle_name': middle,
+        'first_name': first if first else '',
+        'last_name': last if last else '',
+        'middle_name': middle if middle else '',
         'government': 'Minneapolis',
         'agency': 'Minneapolis Park Board',
         'dept': raw_row['Location Description'],

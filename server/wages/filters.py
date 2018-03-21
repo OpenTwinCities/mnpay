@@ -15,7 +15,7 @@ class WageFilter(django_filters.FilterSet):
         fields={
             'first_name': 'first_name',
             'last_name': 'last_name',
-            'title': 'title',
+            'title__name': 'title',
             'government__name': 'government',
             'agency__name': 'agency',
             'dept__name': 'dept',
