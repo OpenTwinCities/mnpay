@@ -1,0 +1,16 @@
+version: '2'
+services:
+  web:
+    environment:
+      - SERVER_ENV=production
+      - SECRET_KEY=${SECRET_KEY}
+    restart: always
+    image: mnpay_web
+    command: /usr/local/bin/gunicorn -w 2 -b :8000 config.wsgi
+  nginx:
+    restart: always
+    image: mnpay_nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - web

@@ -7,27 +7,14 @@ Your system needs the following installed:
 - Docker-compose - If you have pip installed this can be installed with `pip install docker-compose`
 
 ### One-time setup ###
-First start up all of our services
-```
-$ source ./dev_env.sh
-$ docker-compose up --build
-```
-leave this terminal open.
 
-Initialize the database and load in some sample data
+Initialize the database and load in the data
 ```
-$ docker-compose run oneoff python manage.py migrate
-$ docker-compose run oneoff python manage.py loaddata sample_data.json
+cd server
+pipenv install --dev
+python manage.py migrate
+python manage.py loadwages ../resources
 ```
-
-#### Optional ####
-If you would like to add a super user you can run
-```
-docker-compose run oneoff python manage.py createsuperuser
-```
-after initializing the database. It will prompt you to enter a username and
-password. You can then sign in to the admin console at
-[localhost/admin](http://localhost/admin).
 
 
 ### Running ###
@@ -56,4 +43,25 @@ $ docker-compose build web
 If you need to connect to a container for debugging use:
 ```
 docker exec -it <container_id> /bin/bash
+```
+
+## Deployment ##
+First run `docker-compose up` and `python manage.py loadwages ../resources` to
+gather static files, build the client, and load in the data.
+
+```
+cd nginx
+docker save -o mnpay_nginx.image mnpay_nginx
+scp mnpay_nginx.image <remote_server>/<remote_path>
+cd ../server
+docker save -o mnpay_web.image mnpay_web
+scp mnpay_web.image <remote_server>/<remote_path>
+```
+
+On the remote server.
+
+```
+docker load -i mnpay_nginx.image
+docker load -i mnpay_web.image
+docker-compose -f docker-compose-prod.yml up
 ```
