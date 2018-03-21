@@ -20,7 +20,6 @@ export default class ResultTable extends React.Component {
               <th>Year</th>
             </tr>
             {_data.map(function (object, i) {
-              var numeralWage = new Numeral(object.wages);
               return (<tr key={i}>
                         <td>
                           { object.first_name }
@@ -41,7 +40,7 @@ export default class ResultTable extends React.Component {
                           { object.title }
                         </td>
                         <td>
-                          { "$" + numeralWage.format("0,0.00") }
+                          { "$" + object.wage}
                         </td>
                         <td>
                           { object.year }

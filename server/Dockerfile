@@ -1,1 +1,6 @@
-FROM python:3.5-onbuild
+FROM python:3.6-jessie
+ADD . /app
+WORKDIR /app
+RUN pip install --upgrade pip \
+    && pip install pipenv gunicorn\
+    && pipenv install --system --deploy

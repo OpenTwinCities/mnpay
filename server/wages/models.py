@@ -46,19 +46,6 @@ class Wage(models.Model):
     wage = models.DecimalField(db_index=True, max_digits=10, decimal_places=2)
     year = models.IntegerField(db_index=True, default=0)
 
-    def serialize(self):
-        return {
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "middle_name": self.middle_name,
-            "government": self.government.name,
-            "agency": self.agency.name,
-            "dept": self.dept.name,
-            "title": self.title.name,
-            "wages": self.wage,
-            "year": self.year,
-        }
-
     def __str__(self):
         return '{last}, {first} {middle}'.format(
             last=self.last_name,
