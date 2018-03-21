@@ -18,3 +18,5 @@ docopt = "*"
 
 pudb = "*"
 docker-compose = "*"
+openpyxl = "*"
+pandas = "*"

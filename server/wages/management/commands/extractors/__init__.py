@@ -2,6 +2,7 @@ import os
 
 from . import minneapolis_park_board
 from . import migrated
+from . import mn_state
 
 
 def _load_minneapolis_park_board(resource_path):
@@ -24,8 +25,19 @@ def _load_migrated(resource_path):
     return results
 
 
+def _load_mn_state(resource_path):
+    results = []
+    path = os.path.join(resource_path, 'mn_state')
+    for year in [2016, 2017]:
+        filename = 'fiscal-year-{0}.xlsx'.format(year)
+        full_path = os.path.join(path, filename)
+        results.extend(mn_state.etl(full_path, year))
+    return results
+
+
 def load_all(resource_path):
     results = []
+    results.extend(_load_mn_state(resource_path))
     results.extend(_load_minneapolis_park_board(resource_path))
     results.extend(_load_migrated(resource_path))
     return list(set(results))
