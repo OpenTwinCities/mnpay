@@ -63,3 +63,5 @@ docker load -i mnpay_nginx.image
 docker load -i mnpay_web.image
 docker-compose -f docker-compose-prod.yml up
 ```
+## Wiki ##
+For more information about the state of this project, check out our wiki [here](https://github.com/OpenTwinCities/mnpay/wiki)!
