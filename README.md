@@ -1,9 +1,7 @@
-## Wiki ##
+# MN Pay #
 This project relies on data collection and is currently not working because we don't have the data we need.
 For more information about the state of this project, check out our wiki [here](https://github.com/OpenTwinCities/mnpay/wiki)!
 
-
-# MN Pay #
 ## Getting started ##
 ### Dependencies ###
 Your system needs the following installed:
