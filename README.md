@@ -11,7 +11,9 @@ Your system needs the following installed:
 
 ### One-time setup ###
 
-Initialize the database and load in the data
+Initialize the database and load in the data. This will be done on your local
+machine outside of a docker container.
+
 ```
 cd server
 pipenv install --dev
@@ -19,6 +21,13 @@ python manage.py migrate
 python manage.py loadwages ../resources
 ```
 
+This is creating an sqlite database in the project repo and populating it
+with the data from the `resources/` directory. We do this once at the start
+of the project because the application considers this database to be
+a static build artifact (It has not need to mutate the data while running).
+
+Now that this database has been built the application itself will be served
+through docker.
 
 ### Running ###
 To launch your server run
