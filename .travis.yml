@@ -9,3 +9,4 @@ script:
   - docker ps | grep -q nginx
   - docker ps | grep -q web
   - docker ps | grep -q db
+  - curl -v --silent http://localhost 2>&1 | grep 'Public Salaries'
