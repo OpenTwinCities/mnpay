@@ -10,19 +10,28 @@ Your system needs the following installed:
 - Docker-compose - If you have pip installed this can be installed with `pip install docker-compose`
 
 ### One-time setup ###
-
-Initialize the database and load in the data
-```
+Initialize the database and load in the data. This will be done on your local
+machine outside of a docker container.
+```bash
 cd server
 pipenv install --dev
+pipenv shell
 python manage.py migrate
 python manage.py loadwages ../resources
 ```
+This is creating an sqlite database in the project repo and populating it
+with the data from the `resources/` directory. We do this once at the start
+of the project because the application considers this database to be
+a static build artifact (It has not need to mutate the data while running).
 
+Now that this database has been built the application itself will be served
+through docker.
+
+If you run into issues, consider deleting Pipfile.lock and trying again.
 
 ### Running ###
 To launch your server run
-```
+```bash
 $ source ./dev_env.sh
 $ docker-compose up
 ```
@@ -37,14 +46,14 @@ If you add a dependency to the server you need to rebuild the docker containers
 in order for it to get picked up. This would be the case if you ran
 `pip install [anything]`. Add the requirement to `server/requirements.txt`
 and then run
-```
+```bash
 $ docker-compose build oneoff
 $ docker-compose build web
 ```
 
 ### Handy commands ###
 If you need to connect to a container for debugging use:
-```
+```bash
 docker exec -it <container_id> /bin/bash
 ```
 
@@ -52,7 +61,7 @@ docker exec -it <container_id> /bin/bash
 First run `docker-compose up` and `python manage.py loadwages ../resources` to
 gather static files, build the client, and load in the data.
 
-```
+```bash
 docker save -o mnpay_nginx.image mnpay_nginx
 scp mnpay_nginx.image <remote_server>/<remote_path>
 docker save -o mnpay_web.image mnpay_web
@@ -61,7 +70,7 @@ scp mnpay_web.image <remote_server>/<remote_path>
 
 On the remote server.
 
-```
+```bash
 docker load -i mnpay_nginx.image
 docker load -i mnpay_web.image
 docker-compose -f docker-compose-prod.yml up
