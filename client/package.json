@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack"
+    "start": "webpack -v; webpack"
   },
   "author": "",
   "license": "ISC",
@@ -29,7 +29,8 @@
     "react-router": "^3.0.0",
     "recharts": "^0.20.1",
     "superagent": "^2.3.0",
-    "webpack": "^1.13.2"
+    "webpack": "^1.13.2",
+    "webpack-cli": "^1.5.3"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
